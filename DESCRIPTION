@@ -1,0 +1,15 @@
+Title: Bayesian Nowcasting of Data with Reporting Delay
+Package: RDNowcast
+Encoding: UTF-8
+Type: Package
+Version: 0.0.1
+Date: 2026-04-25
+Authors@R: person("Ivo", "Foppa", role = c("aut", "cre"), email = "ivo.foppa@gmail.com")
+Description: This R package generates ``full'' numbers, when observed numbers are affected by reporting delay. This happens in two steps: 
+    First, posterior samples of `p`, the data completeness, are drawn, based on external data. 
+    Second, given these completeness estimates, random numbers are generated, representing projected ``full'' numbers.
+License: GPL (>= 2)
+Imports: Rcpp (>= 1.1.1)
+LinkingTo: Rcpp
+Config/roxygen2/version: 8.0.0
+RoxygenNote: 7.3.3
