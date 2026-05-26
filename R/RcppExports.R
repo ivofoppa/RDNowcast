@@ -46,7 +46,7 @@ f_N_arr <- function(xvec, pmat) {
 #' @param unit String representing time unit of analysis, week ("week") vs. day ("day").
 #' 
 #' @returns A list with two integer arrays of dimensions NCperiod $\times$ NCsize; the first with the reported, the second with the full numbers. 
-#' 
+#' @example ./man/examples/example1.R
 #' @export
 #' 
 NowcastDataMat <- function(df, NCstart, NCsize = 10L, NCperiod = 52L, reference_date = "reference_date", report_date = "report_date", day_anal = 5L, week_start = 2L, unit = "week") {

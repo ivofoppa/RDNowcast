@@ -19,7 +19,7 @@ using namespace Rcpp;
 //' @param unit String representing time unit of analysis, week ("week") vs. day ("day").
 //' 
 //' @returns A list with two integer arrays of dimensions NCperiod $\times$ NCsize; the first with the reported, the second with the full numbers. 
-//' 
+//' @example ./man/examples/example1.R
 //' @export
 //' 
 // [[Rcpp::export]]
