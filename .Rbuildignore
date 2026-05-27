@@ -3,3 +3,4 @@
 ^\.positai$
 ^\.claude$
 ^Junk$
+^data-raw$
