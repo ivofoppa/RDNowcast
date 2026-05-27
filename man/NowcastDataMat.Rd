@@ -38,7 +38,7 @@ to be on day_anal - 1.}
 \item{unit}{String representing time unit of analysis, week ("week") vs. day ("day").}
 }
 \value{
-A list with two integer arrays of dimensions NCperiod $\times$ NCsize; the first with the reported, the second with the full numbers.
+A list with two integer arrays of dimensions \code{NCperiod} \eqn{\times} NCsize; the first with the reported, the second with the full numbers.
 }
 \description{
 This function generates the numbers used for data completeness estimation, used for nowcasting full numbers
