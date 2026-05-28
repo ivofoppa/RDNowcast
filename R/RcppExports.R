@@ -29,16 +29,67 @@ f_N_arr <- function(xvec, pmat) {
 }
 
 #' Generates data for nowcasting
-NULL
-
+#'  
+#' @description
+#' This function generates the numbers used for data completeness estimation, used for nowcasting full numbers
+#' 
+#' @param df A data frame containing data, with one column representing event times and one with reporting times.
+#'     The data should be complete in the sense, that reporting delays no longer play a role. 
+#' @param NCstart A date in the format "YYYY-mm-dd" representing the most recent data for data completeness estimation.
+#' @param NCsize An integer, representing the length of the time series in chosen time units, for which completeness estimates should be obtained.
+#' @param NCperiod The numbers of weeks used for data generation. By default 52 weeks.
+#' @param reference_date A string variable representing the name of the column with event dates.
+#' @param report_date A string variable representing the name of the column with reporting dates.
+#' @param day_anal Integer representing the day of the analysis, with 1 (sunday) to 7 (saturday); the most recent reporting date is assumed
+#'     to be on day_anal - 1.
+#' @param week_start Integer representing the start of the week; default (monday: 2).
+#' @param unit String representing time unit of analysis, week ("week") vs. day ("day").
+#' 
+#' @returns A list with two integer arrays of dimensions \code{NCperiod} \eqn{\times} NCsize; the first with the reported, the second with the full numbers. 
+#' 
+#' @export
+#' 
 NowcastDataMat <- function(df, NCstart, NCsize = 10L, NCperiod = 52L, reference_date = "reference_date", report_date = "report_date", day_anal = 5L, week_start = 2L, unit = "week") {
     .Call(`_RDNowcast_NowcastDataMat`, df, NCstart, NCsize, NCperiod, reference_date, report_date, day_anal, week_start, unit)
 }
 
+#' 
+#' @description
+#' This function generates estimates for the data completeness that can be used to generate Nowcast estimates. Specifically, the two required
+#' inputs are raws samples from the posterior distribution of the proportion \code{p}, given \code{x} ``successes'' in \code{N} trials. 
+#'     It makes use of the fact, that the distribution is proportional to the Gamma distribution with parameters \code{\eqn{x + 1}} and
+#'     \code{\eqn{N - x + 1}}, where both parameters of the Gamma prior are chosen to be 1 (vague prior).
+#' 
+#' @param x An integer vector with currently observed numbers.
+#' @param N An integer vector with n ("complete") numbers.
+#' @param nsamples The number of samples; the default is 10'000.
+#' @returns A numeric vector.
+#' @examples
+#' pSample(c(10,20),c(12,40))
+#' pSample(23,100)
+#' @export
+#' 
 pSample <- function(x, n, nsamples = 10000L) {
     .Call(`_RDNowcast_pSample`, x, n, nsamples)
 }
 
+#' Generating posterior distribution of data completeness estimates
+#' 
+#' @description 
+#' This function generates builds on the function \code{pSample}, but if the data completeness estimates are obtained for more than one data set.
+#'     The inputs are arrays for the number of successes (x) and totals (n). Each entry in x should correspond to an entry in n and the rows typically
+#'     represent a given temporal distance to the "present" (time of the nowcast). The samples correspondig
+#' 
+#' @param NC A list whose first element is an integer array with observed numbers (incomplete due to reporting delay); 
+#'     the columns represent decreasing temporal distance from "now", the rows represent the complete numbers.
+#'     different times in the nowcast period. 
+#' @param nsamples The number of samples; the default is 10'000.
+#' @returns A numeric vector.
+#' @examples
+#' pSample(c(10,20),c(12,40))
+#' pSample(23,100)
+#' 
+#' @export
 pSampleMult <- function(NC, nsamples = 10000L) {
     .Call(`_RDNowcast_pSampleMult`, NC, nsamples)
 }
