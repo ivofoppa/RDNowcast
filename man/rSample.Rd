@@ -20,6 +20,6 @@ This function draws samples from distribution of the Poisson parameter \code{\eq
     \code{\eqn{\beta = 1}}.
 }
 \examples{
-pSample(c(10,20),c(12,40))
-pSample(23,100)
+lambdavec <- rSample(c(100,120))
+lambdavec |> quantile(probs = c(.5,.025,.975))
 }

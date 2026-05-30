@@ -10,6 +10,25 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// NowcastDataMat
+List NowcastDataMat(DataFrame df, Date NCstart, int NCsize, int NCperiod, String reference_date, String report_date, int day_anal, int week_start, String unit);
+RcppExport SEXP _RDNowcast_NowcastDataMat(SEXP dfSEXP, SEXP NCstartSEXP, SEXP NCsizeSEXP, SEXP NCperiodSEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP day_analSEXP, SEXP week_startSEXP, SEXP unitSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
+    Rcpp::traits::input_parameter< Date >::type NCstart(NCstartSEXP);
+    Rcpp::traits::input_parameter< int >::type NCsize(NCsizeSEXP);
+    Rcpp::traits::input_parameter< int >::type NCperiod(NCperiodSEXP);
+    Rcpp::traits::input_parameter< String >::type reference_date(reference_dateSEXP);
+    Rcpp::traits::input_parameter< String >::type report_date(report_dateSEXP);
+    Rcpp::traits::input_parameter< int >::type day_anal(day_analSEXP);
+    Rcpp::traits::input_parameter< int >::type week_start(week_startSEXP);
+    Rcpp::traits::input_parameter< String >::type unit(unitSEXP);
+    rcpp_result_gen = Rcpp::wrap(NowcastDataMat(df, NCstart, NCsize, NCperiod, reference_date, report_date, day_anal, week_start, unit));
+    return rcpp_result_gen;
+END_RCPP
+}
 // f_N_vec
 IntegerVector f_N_vec(int x, NumericVector pvec);
 RcppExport SEXP _RDNowcast_f_N_vec(SEXP xSEXP, SEXP pvecSEXP) {
@@ -34,57 +53,11 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// NowcastDataMat
-List NowcastDataMat(DataFrame df, Date NCstart, int NCsize, int NCperiod, String reference_date, String report_date, int day_anal, int week_start, String unit);
-RcppExport SEXP _RDNowcast_NowcastDataMat(SEXP dfSEXP, SEXP NCstartSEXP, SEXP NCsizeSEXP, SEXP NCperiodSEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP day_analSEXP, SEXP week_startSEXP, SEXP unitSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
-    Rcpp::traits::input_parameter< Date >::type NCstart(NCstartSEXP);
-    Rcpp::traits::input_parameter< int >::type NCsize(NCsizeSEXP);
-    Rcpp::traits::input_parameter< int >::type NCperiod(NCperiodSEXP);
-    Rcpp::traits::input_parameter< String >::type reference_date(reference_dateSEXP);
-    Rcpp::traits::input_parameter< String >::type report_date(report_dateSEXP);
-    Rcpp::traits::input_parameter< int >::type day_anal(day_analSEXP);
-    Rcpp::traits::input_parameter< int >::type week_start(week_startSEXP);
-    Rcpp::traits::input_parameter< String >::type unit(unitSEXP);
-    rcpp_result_gen = Rcpp::wrap(NowcastDataMat(df, NCstart, NCsize, NCperiod, reference_date, report_date, day_anal, week_start, unit));
-    return rcpp_result_gen;
-END_RCPP
-}
-// pSample
-NumericMatrix pSample(IntegerVector x, IntegerVector n, int nsamples);
-RcppExport SEXP _RDNowcast_pSample(SEXP xSEXP, SEXP nSEXP, SEXP nsamplesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< IntegerVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type n(nSEXP);
-    Rcpp::traits::input_parameter< int >::type nsamples(nsamplesSEXP);
-    rcpp_result_gen = Rcpp::wrap(pSample(x, n, nsamples));
-    return rcpp_result_gen;
-END_RCPP
-}
-// pSampleMult
-NumericMatrix pSampleMult(List NC, int nsamples);
-RcppExport SEXP _RDNowcast_pSampleMult(SEXP NCSEXP, SEXP nsamplesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< List >::type NC(NCSEXP);
-    Rcpp::traits::input_parameter< int >::type nsamples(nsamplesSEXP);
-    rcpp_result_gen = Rcpp::wrap(pSampleMult(NC, nsamples));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_RDNowcast_NowcastDataMat", (DL_FUNC) &_RDNowcast_NowcastDataMat, 9},
     {"_RDNowcast_f_N_vec", (DL_FUNC) &_RDNowcast_f_N_vec, 2},
     {"_RDNowcast_f_N_arr", (DL_FUNC) &_RDNowcast_f_N_arr, 2},
-    {"_RDNowcast_NowcastDataMat", (DL_FUNC) &_RDNowcast_NowcastDataMat, 9},
-    {"_RDNowcast_pSample", (DL_FUNC) &_RDNowcast_pSample, 3},
-    {"_RDNowcast_pSampleMult", (DL_FUNC) &_RDNowcast_pSampleMult, 2},
     {NULL, NULL, 0}
 };
 

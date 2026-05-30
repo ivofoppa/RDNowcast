@@ -1,6 +1,5 @@
 #include <Rcpp.h>
 using namespace Rcpp;
-
 //' Generates a vector of filled-in numbers 
 //' 
 //' \code{f_N_vec} returns a vector of random numbers from the distribution of the total number \code{N}, given the number of successes \code{x}
@@ -21,59 +20,16 @@ IntegerVector f_N_vec(int x, NumericVector pvec) {
   if (x <= 0 )
     Rcpp::stop("x must be a positive integer!");
   
-  const double tol = 1e-20;
-  int stn = x,endn,plen = pvec.size();
-  double pmin = min(pvec),pmax = max(pvec),p,sumprobs,rn;
+  int plen = pvec.size();
   IntegerVector out(plen);
+  double p;
   
-  if (R::dbinom(x, x, pmax, false) > tol) {
-    stn = x;
-  } else {
-    stn = x + 1;
-    while (R::dbinom(x, stn, pmax, false) < tol) {
-      stn++;
-    }
-  }
-  
-  endn = stn + 1;
-  while (R::dbinom(x, endn, pmax, false) > tol) {
-    endn++;
-  }
-  
-  while (R::dbinom(x, endn, pmin, false) > tol) {
-    endn++;
-  }
-  
-  int len = endn - stn + 1;
-  
-  IntegerVector nrng(len);
-  for (int i = 0; i < len; i++) {
-    nrng[i] = stn + i;
-  }
-  
-  NumericVector probs(len);
-  NumericVector probsnorm(len);
- 
   for (int k = 0; k < plen; k++) {
     p = pvec[k];
-    
-    for (int i = 0; i < len; i++) {
-      probs[i] = R::dbinom(x, nrng[i], p, false);
-    }
-    
-    sumprobs = sum(probs);
-    probsnorm = probs/sumprobs;
-    NumericVector cum_probs = cumsum(probsnorm);
-    
-    rn = R::runif(0.0, 1.0);
-    
-    for (int l = 0; l < len; l++) {
-      if (cum_probs[l] > rn) {
-        out[k] = nrng[l];
-        break;
+    double alpha = x+1, beta=1;
+    double lambda = (R::rgamma(alpha,beta))/p;
+    out[k] = R::rpois(lambda);
       }
-    }
-  }  
   return out;
 }
 
