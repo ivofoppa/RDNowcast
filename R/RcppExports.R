@@ -22,8 +22,8 @@
 #' 
 #' @export
 #' 
-NowcastDataMat <- function(df, NCstart, NCsize = 10L, NCperiod = 52L, reference_date = "reference_date", report_date = "report_date", day_anal = 5L, week_start = 2L, unit = "week") {
-    .Call(`_RDNowcast_NowcastDataMat`, df, NCstart, NCsize, NCperiod, reference_date, report_date, day_anal, week_start, unit)
+NowcastDataMat <- function(df, NCstart, NCsize = 10L, NCperiod = 52L, reference_date = "reference_date", report_date = "report_date", week_start = 2L, unit = "week") {
+    .Call(`_RDNowcast_NowcastDataMat`, df, NCstart, NCsize, NCperiod, reference_date, report_date, week_start, unit)
 }
 
 #' Generates a vector of filled-in numbers 
@@ -51,5 +51,26 @@ f_N_vec <- function(x, pvec) {
 #' 
 f_N_arr <- function(xvec, pmat) {
     .Call(`_RDNowcast_f_N_arr`, xvec, pmat)
+}
+
+#' Generating posterior distribution of data completeness estimates
+#' 
+#' @description 
+#' This function generates builds on the function \code{pSample}, but if the data completeness estimates are obtained for more than one data set.
+#'     The inputs are arrays for the number of successes (x) and totals (n). Each entry in x should correspond to an entry in n and the rows typically
+#'     represent a given temporal distance to the "present" (time of the nowcast). The samples correspondig
+#' 
+#' @param NC A list whose first element is an integer array with observed numbers (incomplete due to reporting delay); 
+#'     the columns represent decreasing temporal distance from "now", the rows represent the complete numbers.
+#'     different times in the nowcast period. 
+#' @param nsamples The number of samples; the default is 10'000.
+#' @returns A numeric vector.
+#' @examples
+#' pSample(c(10,20),c(12,40))
+#' pSample(23,100)
+#' 
+#' @export
+pSampleMult <- function(NC, nsamples = 10000L) {
+    .Call(`_RDNowcast_pSampleMult`, NC, nsamples)
 }
 

@@ -25,13 +25,13 @@ using namespace Rcpp;
 // [[Rcpp::export]]
  List NowcastDataMat(DataFrame df, Date NCstart, int NCsize = 10, int NCperiod = 52, 
                      String reference_date = "reference_date", String report_date = "report_date", 
-                     int day_anal = 5, int week_start = 2, String unit = "week") {
+                     int week_start = 2, String unit = "week") {
    
    DateVector evdates = df[reference_date];
    DateVector rpdates = df[report_date];
    
    Date dte, NCstart_new = NCstart;
-   int mult, dtecomp;
+   int mult, dtecomp, day_anal = NCstart.getWeekday();
    
    if (unit=="week") {
      dtecomp = day_anal - week_start;
@@ -46,10 +46,6 @@ using namespace Rcpp;
      mult = 1;
    } else {
      mult = 7;
-   }
-   
-   while(NCstart_new.getWeekday()!=day_anal) {
-     NCstart_new = NCstart_new + -1;
    }
    
    for(int k=0; k<NCperiod; k++) {
