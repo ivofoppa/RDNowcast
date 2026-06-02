@@ -10,21 +10,21 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// NowcastDataMat
-List NowcastDataMat(DataFrame df, Date NCstart, int NCsize, int NCperiod, String reference_date, String report_date, int week_start, String unit);
-RcppExport SEXP _RDNowcast_NowcastDataMat(SEXP dfSEXP, SEXP NCstartSEXP, SEXP NCsizeSEXP, SEXP NCperiodSEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP week_startSEXP, SEXP unitSEXP) {
+// NowcastProb
+NumericMatrix NowcastProb(DataFrame data, DateVector NCdates, int NCsize, String reference_date, String report_date, int week_start, String unit, int nsamples);
+RcppExport SEXP _RDNowcast_NowcastProb(SEXP dataSEXP, SEXP NCdatesSEXP, SEXP NCsizeSEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP week_startSEXP, SEXP unitSEXP, SEXP nsamplesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
-    Rcpp::traits::input_parameter< Date >::type NCstart(NCstartSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< DateVector >::type NCdates(NCdatesSEXP);
     Rcpp::traits::input_parameter< int >::type NCsize(NCsizeSEXP);
-    Rcpp::traits::input_parameter< int >::type NCperiod(NCperiodSEXP);
     Rcpp::traits::input_parameter< String >::type reference_date(reference_dateSEXP);
     Rcpp::traits::input_parameter< String >::type report_date(report_dateSEXP);
     Rcpp::traits::input_parameter< int >::type week_start(week_startSEXP);
     Rcpp::traits::input_parameter< String >::type unit(unitSEXP);
-    rcpp_result_gen = Rcpp::wrap(NowcastDataMat(df, NCstart, NCsize, NCperiod, reference_date, report_date, week_start, unit));
+    Rcpp::traits::input_parameter< int >::type nsamples(nsamplesSEXP);
+    rcpp_result_gen = Rcpp::wrap(NowcastProb(data, NCdates, NCsize, reference_date, report_date, week_start, unit, nsamples));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -52,24 +52,11 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// pSampleMult
-NumericMatrix pSampleMult(List NC, int nsamples);
-RcppExport SEXP _RDNowcast_pSampleMult(SEXP NCSEXP, SEXP nsamplesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< List >::type NC(NCSEXP);
-    Rcpp::traits::input_parameter< int >::type nsamples(nsamplesSEXP);
-    rcpp_result_gen = Rcpp::wrap(pSampleMult(NC, nsamples));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_RDNowcast_NowcastDataMat", (DL_FUNC) &_RDNowcast_NowcastDataMat, 8},
+    {"_RDNowcast_NowcastProb", (DL_FUNC) &_RDNowcast_NowcastProb, 8},
     {"_RDNowcast_f_N_vec", (DL_FUNC) &_RDNowcast_f_N_vec, 2},
     {"_RDNowcast_f_N_arr", (DL_FUNC) &_RDNowcast_f_N_arr, 2},
-    {"_RDNowcast_pSampleMult", (DL_FUNC) &_RDNowcast_pSampleMult, 2},
     {NULL, NULL, 0}
 };
 
