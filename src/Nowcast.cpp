@@ -34,6 +34,13 @@ IntegerMatrix Nowcast(DataFrame data, Date dateAnal, DateVector NCdates, int NCs
   //Date dte, dateAnal = max(rpdates) + 1;
   Date dte;
   
+<<<<<<< HEAD
+=======
+  if(ISNA(dateAnal)) {
+    dateAnal = max(rpdates) + 1;
+  }
+  
+>>>>>>> 7d74a4ecd86ae2cd1545a3b762e809b215b49a7e
   if(dateAnal > Date(max(rpdates) + 1)) 
     Rcpp::stop("Date parameter cannot be larger than most recent report_date + 1!");
   
