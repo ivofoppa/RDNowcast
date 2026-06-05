@@ -28,7 +28,7 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 IntegerMatrix Nowcast(DataFrame data, Date dateAnal, DateVector NCdates, int NCsize = 10,  
                           String reference_date = "reference_date", String report_date = "report_date", 
-                          int week_start = 2, String unit = "week",int nsamples = 100000) {
+                          int week_start = 2, String unit = "week", int nsamples = 100000) {
   
   DateVector rpdates = data[report_date], evdates = data[reference_date],analdates(NCsize);
   //Date dte, dateAnal = max(rpdates) + 1;
