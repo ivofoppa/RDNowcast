@@ -26,7 +26,20 @@
 #' @export
 NowcastProcessed <- function(data, dateAnal, NCdates, NCsize = 10,  
                              reference_date = "reference_date", report_date = "report_date", 
-                             week_start = 2, unit = "week",nsamples = 100000, probs = c(0.5,0.025,0.975)) {
+                             week_start = 2, unit = "week",nsamples = 100000, probs = c(0.5,0.025,0.975),
+                             fd_distance = 20, NCperiods = 52) {
+  
+  
+  if(missingArg(dateAnal)) {
+    eval(parse(text = str_c("rep_date_max <- data[\"",reference_date,"\"] |> rename(reference_date = ",reference_date,") |> 
+                        slice_max(reference_date) |> unlist() |> as.vector() |> unique() |> 
+                        as.Date(origin=\"1960-01-01\")")))
+    dateAnal <- rep_date_max + 1
+  }
+  
+  if(missingArg(NCdates)) {
+    NCdates <- seq.Date(dateAnal - 7*fd_distance - NCperiods*7,length.out = NCperiods,by = "weeks")
+  }
   
   NC <- Nowcast(data, dateAnal, NCdates, NCsize, reference_date,report_date, week_start, unit,
                           nsamples)
@@ -41,7 +54,7 @@ NowcastProcessed <- function(data, dateAnal, NCdates, NCsize = 10,
     mult <- 1;
   }
   
-  dateseq <- seq.Date(dateAnal - dtecomp - mult*(NCsize - 1),length.out = NCsize,by=unit)
+  dateseq <- seq.Date(dateAnal - dtecomp - mult*(NCsize),length.out = NCsize,by=unit)
   
   sapply(1:NCsize, function(d) quantile(NC[,d],probs = probs)) |> 
     t() |> 
