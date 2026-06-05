@@ -4,7 +4,7 @@
 #' This function processes the draws from the imputed full numbers (without reporting delay), i.e. the posterior 
 #' distributions for the full data. 
 #' 
-#' @import dplyr, lubridate
+#' @import dplyr,lubridate,stringr
 #' @param df A data frame containing data, with one column representing event times and one with reporting times.
 #'     The data should be complete in the sense, that reporting delays no longer play a role. 
 #' @param dateAnal A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.
@@ -26,7 +26,20 @@
 #' @export
 NowcastProcessed <- function(data, dateAnal, NCdates, NCsize = 10,  
                              reference_date = "reference_date", report_date = "report_date", 
-                             week_start = 2, unit = "week",nsamples = 100000, probs = c(0.5,0.025,0.975)) {
+                             week_start = 2, unit = "week",nsamples = 100000, probs = c(0.5,0.025,0.975),
+                             fd_distance = 20, NCperiods = 52) {
+  
+  
+  if(missingArg(dateAnal)) {
+    eval(parse(text = str_c("rep_date_max <- data[\"",reference_date,"\"] |> rename(reference_date = ",reference_date,") |> 
+                        slice_max(reference_date) |> unlist() |> as.vector() |> unique() |> 
+                        as.Date(origin=\"1960-01-01\")")))
+    dateAnal <- rep_date_max + 1
+  }
+  
+  if(missingArg(NCdates)) {
+    NCdates <- seq.Date(dateAnal - 7*fd_distance - NCperiods*7,length.out = NCperiods,by = "weeks")
+  }
   
   NC <- Nowcast(data, dateAnal, NCdates, NCsize, reference_date,report_date, week_start, unit,
                           nsamples)
@@ -41,7 +54,7 @@ NowcastProcessed <- function(data, dateAnal, NCdates, NCsize = 10,
     mult <- 1;
   }
   
-  dateseq <- seq.Date(dateAnal - dtecomp - mult*(NCsize - 1),length.out = NCsize,by=unit)
+  dateseq <- seq.Date(dateAnal - dtecomp - mult*(NCsize),length.out = NCsize,by=unit)
   
   sapply(1:NCsize, function(d) quantile(NC[,d],probs = probs)) |> 
     t() |> 
