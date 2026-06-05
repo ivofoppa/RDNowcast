@@ -1,6 +1,8 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+//[Rcpp::interfaces(cpp)]
+
 //' Generates data for posterior probabilities for Nowcasting
 //'  
 //' @description
@@ -19,6 +21,7 @@ using namespace Rcpp;
 //' @param unit String representing time unit of analysis, week ("week") vs. day ("day").
 //' @param nsamples An integer of default 100,000, representing the number of samples from the posterior distributions.
 //' @returns A list with two integer arrays of dimensions \code{NCperiod} \eqn{\times} NCsize; the first with the reported, the second with the full numbers. 
+//' @example man/examples/NowcastProb.R
 //' 
 //' @export
 //' 

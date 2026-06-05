@@ -17,8 +17,8 @@ IntegerVector f_N_vec(int x, NumericVector pvec) {
   if (min(pvec) < 0 || max(pvec)>1)
     Rcpp::stop("Elements of pvec have to be between 0 and 1!");
   
-  if (x <= 0 )
-    Rcpp::stop("x must be a positive integer!");
+  if (x < 0 )
+    Rcpp::stop("x must be a non-negative integer!");
   
   int plen = pvec.size();
   IntegerVector out(plen);
@@ -32,6 +32,7 @@ IntegerVector f_N_vec(int x, NumericVector pvec) {
       }
   return out;
 }
+//[Rcpp::interfaces(cpp)]
 
 //' Generates an array of filled-in numbers 
 //' 
@@ -52,8 +53,8 @@ IntegerMatrix f_N_arr(IntegerVector xvec, NumericMatrix pmat) {
   if (min(pmat) < 0 || max(pmat)>1)
     Rcpp::stop("Elements of pmat have to be between 0 and 1!");
   
-  if (min(xvec) <= 0)
-    Rcpp::stop("x must be positive!");
+  if (min(xvec) < 0)
+    Rcpp::stop("x must be non-negative!");
   
   int x;
   IntegerMatrix out(nsmpls,xsze);
