@@ -6,15 +6,17 @@
 \usage{
 NowcastProcessed(
   data,
-  dateAnal,
-  NCdates,
+  dateAnal = NULL,
+  NCdates = NULL,
   NCsize = 10,
   reference_date = "reference_date",
   report_date = "report_date",
   week_start = 2,
   unit = "week",
   nsamples = 1e+05,
-  probs = c(0.5, 0.025, 0.975)
+  probs = c(0.5, 0.025, 0.975),
+  fd_distance = 20,
+  NCperiods = 52
 )
 }
 \arguments{
@@ -35,6 +37,10 @@ NowcastProcessed(
 \item{nsamples}{An integer of default 100,000, representing the number of samples from the posterior distributions.}
 
 \item{probs}{A numeric vector 0-1, representing the desired quantiles of the nowcast estimates.}
+
+\item{fd_distance}{Interger, the number of weeks after data are assumed to be complete. Only used if NCdates is not assigned.}
+
+\item{NCperiods}{Integer, the number of data sets used for completeness estimation. Only used if NCdates not assigned.}
 
 \item{df}{A data frame containing data, with one column representing event times and one with reporting times.
 The data should be complete in the sense, that reporting delays no longer play a role.}
