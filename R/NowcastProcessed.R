@@ -5,7 +5,7 @@
 #' distributions for the full data. 
 #' 
 #' @import dplyr,lubridate,stringr
-#' @param df A data frame containing data, with one column representing event times and one with reporting times.
+#' @param data A data frame containing data, with one column representing event times and one with reporting times.
 #'     The data should be complete in the sense, that reporting delays no longer play a role. 
 #' @param dateAnal A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.
 #' @param NCdates A date vector, representing the dates used for the completeness estimation; these dates have to correspond to the same day of week as dateAnal.
@@ -21,10 +21,8 @@
 #' @param probs A numeric vector 0-1, representing the desired quantiles of the nowcast estimates.  
 #' @param fd_distance Interger, the number of weeks after data are assumed to be complete. Only used if NCdates is not assigned.
 #' @param NCperiods Integer, the number of data sets used for completeness estimation. Only used if NCdates not assigned. 
-#' @returns A numeric vector of length \code{nsamples * length(x)}.
-#' @examples
-#' lambdavec <- rSample(c(100,120))
-#' lambdavec |> quantile(probs = c(.5,.025,.975))
+#' @returns A table with quantiles of the MCMC samples per date.
+#' @example man/examples/NowcastProcessed_example.R
 #' @export
 NowcastProcessed <- function(data, dateAnal = NULL, NCdates = NULL, NCsize = 10,  
                              reference_date = "reference_date", report_date = "report_date", 
@@ -52,7 +50,7 @@ NowcastProcessed <- function(data, dateAnal = NULL, NCdates = NULL, NCsize = 10,
     dtecomp <- day_anal - week_start;
     mult <- 7;
   } else {
-    dtecomp <- 0;
+    dtecomp <- 1;
     mult <- 1;
   }
   

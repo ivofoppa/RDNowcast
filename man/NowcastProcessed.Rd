@@ -20,6 +20,9 @@ NowcastProcessed(
 )
 }
 \arguments{
+\item{data}{A data frame containing data, with one column representing event times and one with reporting times.
+The data should be complete in the sense, that reporting delays no longer play a role.}
+
 \item{dateAnal}{A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.}
 
 \item{NCdates}{A date vector, representing the dates used for the completeness estimation; these dates have to correspond to the same day of week as dateAnal.}
@@ -42,22 +45,28 @@ NowcastProcessed(
 
 \item{NCperiods}{Integer, the number of data sets used for completeness estimation. Only used if NCdates not assigned.}
 
-\item{df}{A data frame containing data, with one column representing event times and one with reporting times.
-The data should be complete in the sense, that reporting delays no longer play a role.}
-
 \item{NCperiod}{The numbers of weeks used for data generation. By default 52 weeks.}
 
 \item{day_anal}{Integer representing the day of the analysis, with 1 (sunday) to 7 (saturday); the most recent reporting date is assumed
 to be on day_anal - 1.}
 }
 \value{
-A numeric vector of length \code{nsamples * length(x)}.
+A table with quantiles of the MCMC samples per date.
 }
 \description{
 This function processes the draws from the imputed full numbers (without reporting delay), i.e. the posterior 
 distributions for the full data.
 }
 \examples{
-lambdavec <- rSample(c(100,120))
-lambdavec |> quantile(probs = c(.5,.025,.975))
+library(RDNowcast)
+
+NCdata <- RDNowcast::RDdata  ### Loading the data set from the package
+
+datean <- as.Date("2026-05-14")  ### Setting the date of the analysis; the most recent data were reported one day prior
+
+ncdates <- NCdates_create(data = NCdata, dateAnal = date_anal, NCperiods = 5)
+
+NC <- NowcastProcessed(data,dateAnal = datean,NCsize = 10 ,unit = "week")
+
+NC
 }
