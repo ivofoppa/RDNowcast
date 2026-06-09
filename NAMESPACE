@@ -1,4 +1,4 @@
 useDynLib(RDNowcast, .registration=TRUE)
 importFrom(Rcpp, evalCpp)
-import(dplyr, lubridate, stringr)
+import(dplyr, lubridate, stringr,dint)
 exportPattern("^[[:alpha:]]+")

@@ -36,7 +36,9 @@ Nowcast(
 \item{df}{A data frame containing data, with one column representing event times and one with reporting times.
 The data should be complete in the sense, that reporting delays no longer play a role.}
 
-\item{NCperiod}{The numbers of weeks used for data generation. By default 52 weeks.}
+\item{NCperiod}{The numbers of weeks (data sets) used for completeness estimation. By default 52 weeks. A data set consists of observed counts for a time series of length \code{NCsize} time units.
+These count have the same temporal relationship to the hypothetical time of analysis we have no to the data to be nowcasted. The second component is the complete data.
+These numbers can be generated from a data for which reporting delay no longer has a relevant effect.}
 
 \item{day_anal}{Integer representing the day of the analysis, with 1 (sunday) to 7 (saturday); the most recent reporting date is assumed
 to be on day_anal - 1.}
@@ -45,5 +47,18 @@ to be on day_anal - 1.}
 A list with two integer arrays of dimensions \code{NCperiod} \eqn{\times} NCsize; the first with the reported, the second with the full numbers.
 }
 \description{
-This function generates the numbers used for data completeness estimation and generates posterior completeness probabilities for Nowcasting full numbers.
+This function generates the numbers used for data completeness estimation and generates posterior completeness probabilities for Nowcasting full numbers. The data used for this are reconstructed from historical data
+    for which reporting delay no longer has a relevant effect.
+}
+\examples{
+library(dplyr)
+library(RDNowcast)
+
+datean <- as.Date("2025-05-15") ## Day of analysis, here a Thursday 
+
+ncdates <- NCdates_create(data = NCdata,dateAnal = datean)
+
+NC <- Nowcast(data = NCdata, dateAnal = datean, NCdates = ncdates) ### List containing observed (incomplete) and complete data.
+
+head(NC)
 }
