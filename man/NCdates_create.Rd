@@ -5,8 +5,8 @@
 \title{Function to set the dates for the data completeness estimation}
 \usage{
 NCdates_create(
-  dateAnal,
   data,
+  dateAnal,
   fd_distance = 10,
   NCperiods = 52,
   NCdatesProp = NULL,
@@ -14,15 +14,17 @@ NCdates_create(
 )
 }
 \arguments{
-\item{dateAnal}{Both character input (format "YYYY-mm-dd") or date accepted, representing the date of analysis; the most recent data is assumed to have been submitted the day before or prior to that.}
-
 \item{data}{A data frame; each row corresponds to one report/case.}
+
+\item{dateAnal}{Both character input (format "YYYY-mm-dd") or date accepted, representing the date of analysis; the most recent data is assumed to have been submitted the day before or prior to that.}
 
 \item{fd_distance}{Interger, the number of weeks after data are assumed to be complete. Only used if NCdates is not assigned.}
 
 \item{NCperiods}{Integer, the number of data sets used for completeness estimation. Only used if NCdates not assigned.}
 
-\item{reference_date}{A string variable representing the name of the column with event dates.}
+\item{NCdatesProp}{A date vector with proposed dates for the Nowcast estimation.}
+
+\item{reference_date}{A character variable representing the name of the column with event dates.}
 }
 \value{
 A date vector.

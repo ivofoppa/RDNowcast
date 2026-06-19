@@ -14,9 +14,10 @@ NowcastProcessed(
   week_start = 2,
   unit = "week",
   nsamples = 1e+05,
-  probs = c(0.5, 0.025, 0.975),
+  probs = c(0.025, 0.975),
   fd_distance = 20,
-  NCperiods = 52
+  NCperiods = 52,
+  cnames = c(unit, "median", "lowerCrI", "upperCrI", "observed")
 )
 }
 \arguments{
@@ -39,11 +40,14 @@ The data should be complete in the sense, that reporting delays no longer play a
 
 \item{nsamples}{An integer of default 100,000, representing the number of samples from the posterior distributions.}
 
-\item{probs}{A numeric vector 0-1, representing the desired quantiles of the nowcast estimates.}
+\item{probs}{A numeric vector 0-1, representing the desired quantiles of the nowcast MCMC samples, besides the median.}
 
 \item{fd_distance}{Interger, the number of weeks after data are assumed to be complete. Only used if NCdates is not assigned.}
 
 \item{NCperiods}{Integer, the number of data sets used for completeness estimation. Only used if NCdates not assigned.}
+
+\item{cnames}{A character vector with the desired names of the output table; the default values are \code{c(unit,"median","lowerCrI","upperCrI","observed")}, representing
+time (in chosen time units), the median of the MCMC samples, the lower credible interval (level chosen in the argument \code{probs}), the upper credible interval and the observed counts.}
 
 \item{NCperiod}{The numbers of weeks used for data generation. By default 52 weeks.}
 
