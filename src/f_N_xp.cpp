@@ -27,8 +27,9 @@ IntegerVector f_N_vec(int x, NumericVector pvec) {
   for (int k = 0; k < plen; k++) {
     p = pvec[k];
     double alpha = x+1, beta=1;
-    double lambda = (R::rgamma(alpha,beta))/p;
-    out[k] = R::rpois(lambda);
+    double lambda1 = (R::rgamma(alpha,beta));
+    double lambda2 = lambda1/p - lambda1;
+    out[k] = R::rpois(lambda2) + x;
       }
   return out;
 }
