@@ -2,7 +2,7 @@ Title: Bayesian Nowcasting of Data with Reporting Delay
 Package: RDNowcast
 Encoding: UTF-8
 Type: Package
-Version: 1.0.0
+Version: 1.0.1
 Date: 2026-06-20
 Authors@R: person("Ivo", "Foppa", role = c("aut", "cre"), email = "ivo.foppa@gmail.com")
 Description: This R package generates ``full'' numbers, when observed numbers are affected by reporting delay. This happens in two steps: 

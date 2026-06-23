@@ -23,19 +23,24 @@
 #' @param NCperiods Integer, the number of data sets used for completeness estimation. Only used if NCdates not assigned. 
 #' @param cnames A character vector with the desired names of the output table; the default values are \code{c(unit,"median","lowerCrI","upperCrI","observed")}, representing
 #'     time (in chosen time units), the median of the MCMC samples, the lower credible interval (level chosen in the argument \code{probs}), the upper credible interval and the observed counts. 
+#' @param tu_lab Desired label of time units in table.   
 #' @returns A table with quantiles of the MCMC samples per date.
 #' @example man/examples/NowcastProcessed_example.R
 #' @export
 NowcastProcessed <- function(data, dateAnal = NULL, NCdates = NULL, NCsize = 10,  
                              reference_date = "reference_date", report_date = "report_date", 
                              week_start = 2, unit = "week",nsamples = 100000, probs = c(0.025,0.975),
-                             fd_distance = 20, NCperiods = 52, cnames = c(unit,"median","lowerCrI","upperCrI","observed")) {
+                             fd_distance = 20, NCperiods = 52, cnames = c("median","lowerCrI","upperCrI","observed"),tu_lab = "week") {
   
-  
-  if(is.null(dateAnal)) {
-    eval(parse(text = str_c("rep_date_max <- data[\"",reference_date,"\"] |> rename(reference_date = ",reference_date,") |> 
-                        slice_max(reference_date) |> unlist() |> as.vector() |> unique() |> 
-                        as.Date(origin=\"1970-01-01\")")))
+ 
+   data <- data |> 
+     rename(reference_date = reference_date, report_date = report_date)
+   
+   if(is.null(dateAnal)) {
+     rep_date_max <- data |> 
+       slice_max(reference_date) |> pull(reference_date) |> unique() |>  
+       as.Date(origin="1970-01-01")
+     
     dateAnal <- rep_date_max + 1
   }
   
@@ -43,10 +48,11 @@ NowcastProcessed <- function(data, dateAnal = NULL, NCdates = NULL, NCsize = 10,
     NCdates <- seq.Date(dateAnal - 7*fd_distance - NCperiods*7,length.out = NCperiods,by = "weeks")
   }
   
-  NC <- Nowcast(data, dateAnal, NCdates, NCsize, reference_date,report_date, week_start, unit,
-                nsamples)
+  NC <- Nowcast(data, dateAnal = dateAnal, NCdates = NCdates, NCsize = NCsize, week_start = week_start, unit = unit,
+                nsamples = nsamples)
   
   day_anal <- wday(dateAnal)
+  cnames <- c(tu_lab,cnames)
   
   if (unit=="week") {
     dtecomp <- day_anal - week_start;
@@ -83,8 +89,5 @@ NowcastProcessed <- function(data, dateAnal = NULL, NCdates = NULL, NCsize = 10,
   
   colnames(tab) <- cnames
   
-  if(unit!="week") {
-    colnames(tab)[1] <- "date"
-  }
   tab
 }
