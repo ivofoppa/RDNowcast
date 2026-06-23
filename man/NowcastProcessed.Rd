@@ -17,7 +17,8 @@ NowcastProcessed(
   probs = c(0.025, 0.975),
   fd_distance = 20,
   NCperiods = 52,
-  cnames = c(unit, "median", "lowerCrI", "upperCrI", "observed")
+  cnames = c("median", "lowerCrI", "upperCrI", "observed"),
+  tu_lab = "week"
 )
 }
 \arguments{
@@ -48,6 +49,8 @@ The data should be complete in the sense, that reporting delays no longer play a
 
 \item{cnames}{A character vector with the desired names of the output table; the default values are \code{c(unit,"median","lowerCrI","upperCrI","observed")}, representing
 time (in chosen time units), the median of the MCMC samples, the lower credible interval (level chosen in the argument \code{probs}), the upper credible interval and the observed counts.}
+
+\item{tu_lab}{Desired label of time units in table.}
 
 \item{NCperiod}{The numbers of weeks used for data generation. By default 52 weeks.}
 
