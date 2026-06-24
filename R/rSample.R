@@ -5,7 +5,6 @@
 #'     It makes use of the fact, that the distribution is a Gamma distribution with parameters \code{\eqn{\alpha = x +1}} and
 #'     \code{\eqn{\beta = 1}}.
 #' 
-#' @import dplyr
 #' @param x An integer vector.
 #' @param nsamples The number of samples; the default is 10'000.
 #' @returns A numeric vector of length \code{nsamples * length(x)}.
