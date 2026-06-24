@@ -3,7 +3,8 @@
 #' @description
 #' This function creates a vector of dates, each representing the same day of the week as \code{dateAnal}. 
 #' 
-#' @import dplyr,dint
+# #' @import dplyr,dint
+#' @import lubridate
 #' @param dateAnal Both character input (format "YYYY-mm-dd") or date accepted, representing the date of analysis; the most recent data is assumed to have been submitted the day before or prior to that.
 #' @param data A data frame; each row corresponds to one report/case.
 #' @param fd_distance Interger, the number of weeks after data are assumed to be complete. Only used if NCdates is not assigned.
