@@ -1,10 +1,10 @@
-#' Wrapper function for the function \code{RDNowcast::Nowcast()} that computes quantiles for the Nowcast estimates.
+#' Wrapper function for the function \code{RDNowcast::Nowcast()}
 #' 
 #' @description
-#' This function processes the draws from the imputed full numbers (without reporting delay), i.e. the posterior 
+#' This helper function processes the draws from the imputed full numbers (without reporting delay), i.e. the posterior 
 #' distributions for the full data. 
 #' 
-#' @import dplyr,dint,stringr
+#' @import dplyr, lubridate
 #' @param data A data frame containing data, with one column representing event times and one with reporting times.
 #'     The data should be complete in the sense, that reporting delays no longer play a role. 
 #' @param dateAnal A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.
@@ -46,6 +46,15 @@ NowcastProcessed <- function(data, dateAnal = NULL, NCdates = NULL, NCsize = 10,
   
   if(is.null(NCdates)) {
     NCdates <- seq.Date(dateAnal - 7*fd_distance - NCperiods*7,length.out = NCperiods,by = "weeks")
+  } else {
+    NCdates <- NCdates_create(
+      data = data,
+      dateAnal = dateAnal,
+      fd_distance = fd_distance,
+      NCperiods = NCperiods,
+      NCdatesProp = NCdates,
+      reference_date = reference_date
+    )
   }
   
   NC <- Nowcast(data, dateAnal = dateAnal, NCdates = NCdates, NCsize = NCsize, week_start = week_start, unit = unit,

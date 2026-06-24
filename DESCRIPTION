@@ -9,7 +9,7 @@ Description: This R package generates ``full'' numbers, when observed numbers ar
     First, posterior samples of `p`, the data completeness, are drawn, based on external data. 
     Second, given these completeness estimates, random numbers are generated, representing projected ``full'' numbers.
 License: GPL (>= 2)
-Imports: Rcpp (>= 1.1.1)
+Imports: Rcpp (>= 1.1.1), lubridate, dplyr
 LinkingTo: Rcpp
 Config/roxygen2/version: 8.0.0
 RoxygenNote: 7.3.3
