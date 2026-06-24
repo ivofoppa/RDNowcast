@@ -4,7 +4,7 @@
 #' This function processes the draws from the imputed full numbers (without reporting delay), i.e. the posterior 
 #' distributions for the full data. 
 #' 
-#' @import dplyr,dint,stringr
+#' @import dplyr, lubridate
 #' @param data A data frame containing data, with one column representing event times and one with reporting times.
 #'     The data should be complete in the sense, that reporting delays no longer play a role. 
 #' @param dateAnal A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.
