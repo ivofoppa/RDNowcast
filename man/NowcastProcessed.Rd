@@ -2,7 +2,7 @@
 % Please edit documentation in R/NowcastProcessed.R
 \name{NowcastProcessed}
 \alias{NowcastProcessed}
-\title{Wrapper function for the function \code{RDNowcast::Nowcast()} that computes quantiles for the Nowcast estimates.}
+\title{Wrapper function for the function \code{RDNowcast::Nowcast()}}
 \usage{
 NowcastProcessed(
   data,
@@ -61,7 +61,7 @@ to be on day_anal - 1.}
 A table with quantiles of the MCMC samples per date.
 }
 \description{
-This function processes the draws from the imputed full numbers (without reporting delay), i.e. the posterior 
+This helper function processes the draws from the imputed full numbers (without reporting delay), i.e. the posterior 
 distributions for the full data.
 }
 \examples{

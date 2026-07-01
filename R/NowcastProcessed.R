@@ -42,7 +42,9 @@ NowcastProcessed <- function(data, dateAnal = NULL, NCdates = NULL, NCsize = 10,
        as.Date(origin="1970-01-01")
      
     dateAnal <- rep_date_max + 1
-  }
+   } else {
+     dateAnal = as.Date(dateAnal)
+   }
   
   if(is.null(NCdates)) {
     NCdates <- seq.Date(dateAnal - 7*fd_distance - NCperiods*7,length.out = NCperiods,by = "weeks")
