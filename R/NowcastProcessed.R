@@ -1,4 +1,4 @@
-#' Wrapper function for the function \code{RDNowcast::Nowcast()}
+#' Helper function for the function \code{RDNowcast::Nowcast()}
 #' 
 #' @description
 #' This helper function processes the draws from the imputed full numbers (without reporting delay), i.e. the posterior 
@@ -32,19 +32,19 @@ NowcastProcessed <- function(data, dateAnal = NULL, NCdates = NULL, NCsize = 10,
                              week_start = 2, unit = "week",nsamples = 100000, probs = c(0.025,0.975),
                              fd_distance = 20, NCperiods = 52, cnames = c("median","lowerCrI","upperCrI","observed"),tu_lab = "week") {
   
- 
-   data <- data |> 
-     rename(reference_date = reference_date, report_date = report_date)
-   
-   if(is.null(dateAnal)) {
-     rep_date_max <- data |> 
-       slice_max(reference_date) |> pull(reference_date) |> unique() |>  
-       as.Date(origin="1970-01-01")
-     
+  
+  data <- data |> 
+    rename(reference_date = reference_date, report_date = report_date)
+  
+  if(is.null(dateAnal)) {
+    rep_date_max <- data |> 
+      slice_max(reference_date) |> pull(reference_date) |> unique() |>  
+      as.Date(origin="1970-01-01")
+    
     dateAnal <- rep_date_max + 1
-   } else {
-     dateAnal = as.Date(dateAnal)
-   }
+  } else {
+    dateAnal = as.Date(dateAnal)
+  }
   
   if(is.null(NCdates)) {
     NCdates <- seq.Date(dateAnal - 7*fd_distance - NCperiods*7,length.out = NCperiods,by = "weeks")

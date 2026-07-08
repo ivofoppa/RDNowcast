@@ -25,13 +25,18 @@ NCdates_create <- function(data, dateAnal, fd_distance = 10, NCperiods = 52, NCd
     dseqsel <- dseq0 |> 
       sapply(function(d) d %in% unique(data$reference_date))
     dseq0[dseqsel]
-  } else if (is.Date(NCdatesProp)) {
-    dseq0 <- NCdatesProp
-    dseqsel <- dseq0 |> 
-      sapply(function(d) d %in% unique(data$reference_date))
-    dseq <- dseq0[dseqsel]
-    sapply(dseq, function(d) if_else(wday(d)==refday,d,d + (refday - wday(d)))) |> as.Date()
   } else {
-    stop("No adequate date vector provided or found!")
-  }
+    dseq0 <- NCdatesProp |> 
+      as.Date()
+    
+    dseqsel <- dseq0 |> 
+      sapply(function(d) d %in% unique(data$reference_date)) |> as.vector()
+    
+    dseq <- dseq0[dseqsel]
+    if(length(dseq)==0) {
+      stop("No adequate date vector provided or found!")
+    } else {
+      sapply(dseq, function(d) if_else(wday(d)==refday,d,d + (refday - wday(d)))) |> as.Date()
+    }
+  } 
 }
