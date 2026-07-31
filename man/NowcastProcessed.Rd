@@ -2,7 +2,7 @@
 % Please edit documentation in R/NowcastProcessed.R
 \name{NowcastProcessed}
 \alias{NowcastProcessed}
-\title{Wrapper function for the function \code{RDNowcast::Nowcast()}}
+\title{Helper function for the function \code{RDNowcast::Nowcast()}}
 \usage{
 NowcastProcessed(
   data,
