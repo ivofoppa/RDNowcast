@@ -15,7 +15,7 @@
 #' @param report_date A string variable representing the name of the column with reporting dates.
 #' @param day_anal Integer representing the day of the analysis, with 1 (sunday) to 7 (saturday); the most recent reporting date is assumed
 #'     to be on day_anal - 1.
-#' @param week_start Integer representing the start of the week; default (monday: 2).
+#' @param offset  The number of days before dateAnal of the most recent reference date considered.
 #' @param unit String representing time unit of analysis, week ("week") vs. day ("day").
 #' @param nsamples An integer of default 100,000, representing the number of samples from the posterior distributions.
 #' @param probs A numeric vector 0-1, representing the desired quantiles of the nowcast MCMC samples, besides the median.  
@@ -25,11 +25,11 @@
 #'     time (in chosen time units), the median of the MCMC samples, the lower credible interval (level chosen in the argument \code{probs}), the upper credible interval and the observed counts. 
 #' @param tu_lab Desired label of time units in table.   
 #' @returns A table with quantiles of the MCMC samples per date.
-#' @example man/examples/NowcastProcessed_example.R
+# #' @example man/examples/NowcastProcessed_example.R
 #' @export
-NowcastProcessed <- function(data, dateAnal = NULL, NCdates = NULL, NCsize = 10,  
+NowcastProcessed <- function(data, dateAnal = NULL, offset = 4, NCdates = NULL, NCsize = 10,  
                              reference_date = "reference_date", report_date = "report_date", 
-                             week_start = 2, unit = "week",nsamples = 100000, probs = c(0.025,0.975),
+                             unit = "week",nsamples = 100000, probs = c(0.025,0.975),
                              fd_distance = 20, NCperiods = 52, cnames = c("median","lowerCrI","upperCrI","observed"),tu_lab = "week") {
   
   
@@ -37,17 +37,29 @@ NowcastProcessed <- function(data, dateAnal = NULL, NCdates = NULL, NCsize = 10,
     rename(reference_date = reference_date, report_date = report_date)
   
   if(is.null(dateAnal)) {
-    rep_date_max <- data |> 
-      slice_max(reference_date) |> pull(reference_date) |> unique() |>  
-      as.Date(origin="1970-01-01")
+    dateAnal <- data |> 
+      group_by(report_date) |> 
+      summarize(n = n()) |> ungroup() |> 
+      filter(n >= 5) |> 
+      tail(n = 1) |> pull(report_date) + 1
     
-    dateAnal <- rep_date_max + 1
   } else {
-    dateAnal = as.Date(dateAnal)
-  }
+    dateAnal <- as.Date(dateAnal)
+    dateAnal <- data |> 
+      group_by(report_date) |> 
+      summarize(n = n()) |> ungroup() |> 
+      filter(report_date < dateAnal,n >=5) |> 
+      tail(n = 1) |> pull(report_date) + 1
+  } 
   
   if(is.null(NCdates)) {
-    NCdates <- seq.Date(dateAnal - 7*fd_distance - NCperiods*7,length.out = NCperiods,by = "weeks")
+    NCdates <- NCdates_create(
+      data = data,
+      dateAnal = dateAnal,
+      fd_distance = fd_distance,
+      NCperiods = NCperiods,
+      reference_date = reference_date
+    )
   } else {
     NCdates <- NCdates_create(
       data = data,
@@ -59,32 +71,27 @@ NowcastProcessed <- function(data, dateAnal = NULL, NCdates = NULL, NCsize = 10,
     )
   }
   
-  NC <- Nowcast(data, dateAnal = dateAnal, NCdates = NCdates, NCsize = NCsize, week_start = week_start, unit = unit,
-                nsamples = nsamples)
-  
-  day_anal <- wday(dateAnal)
-  cnames <- c(tu_lab,cnames)
+  NC <- Nowcast(data = data, dateAnal = dateAnal, offset = offset, NCdates = NCdates, NCsize = NCsize,  
+                reference_date = "reference_date", report_date = "report_date", 
+                unit = unit, nsamples = nsamples) 
   
   if (unit=="week") {
-    dtecomp <- day_anal - week_start;
     mult <- 7;
-    dateseq <- seq.Date(dateAnal - dtecomp - mult*(NCsize),length.out = NCsize,by=unit)
-    w_start <- if_else((6 + week_start) %% 7==0,7,(6 + week_start) %% 7)
-    
+    dateseq <- seq.Date(dateAnal - offset - mult*(NCsize),length.out = NCsize,by=unit) + 1
+
     n_obs <- data |> ### die "simulierten" Analysedaten (nach gewählter zeitl. Perspektive)
-      filter(reference_date < (dateAnal - dtecomp),
+      filter(reference_date <= (dateAnal - offset),
              report_date < dateAnal) |> 
-      mutate(week = floor_date(reference_date,unit = "week",week_start =  w_start)) |> 
+      mutate(week = floor_date(reference_date,unit = "week",week_start =  (wday(dateAnal) - offset))) |> 
       group_by(week) |> 
       summarize(n = n()) |> ungroup() |>
       slice_tail(n = NCsize) |> pull(n) |> unlist() |> as.vector()
   } else {
-    dtecomp <- 1;
     mult <- 1;
-    dateseq <- seq.Date(dateAnal - dtecomp - mult*(NCsize) + 1,length.out = NCsize,by=unit)
+    dateseq <- seq.Date(dateAnal - offset - mult*(NCsize),length.out = NCsize,by=unit) + 1
     
     n_obs <- data |> ### die "simulierten" Analysedaten (nach gewählter zeitl. Perspektive)
-      filter(reference_date < dateAnal,
+      filter(reference_date <= (dateAnal - offset),
              report_date < dateAnal) |> 
       group_by(reference_date) |> 
       summarize(n = n()) |> ungroup() |>
@@ -98,7 +105,7 @@ NowcastProcessed <- function(data, dateAnal = NULL, NCdates = NULL, NCsize = 10,
     mutate(n = n_obs,
            across(2:4,\(x) as.integer(x)))
   
-  colnames(tab) <- cnames
+  colnames(tab) <- c(tu_lab,cnames)
   
   tab
 }
