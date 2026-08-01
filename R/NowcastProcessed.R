@@ -82,7 +82,7 @@ NowcastProcessed <- function(data, dateAnal = NULL, offset = 4, NCdates = NULL, 
     n_obs <- data |> ### die "simulierten" Analysedaten (nach gewählter zeitl. Perspektive)
       filter(reference_date <= (dateAnal - offset),
              report_date < dateAnal) |> 
-      mutate(week = floor_date(reference_date,unit = "week",week_start =  (wday(dateAnal) - offset))) |> 
+      mutate(week = floor_date(reference_date,unit = "week",week_start =  (wday(dateAnal - offset)))) |> 
       group_by(week) |> 
       summarize(n = n()) |> ungroup() |>
       slice_tail(n = NCsize) |> pull(n) |> unlist() |> as.vector()
