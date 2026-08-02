@@ -25,7 +25,7 @@
 #'     time (in chosen time units), the median of the MCMC samples, the lower credible interval (level chosen in the argument \code{probs}), the upper credible interval and the observed counts. 
 #' @param tu_lab Desired label of time units in table.   
 #' @returns A table with quantiles of the MCMC samples per date.
-# #' @example man/examples/NowcastProcessed_example.R
+#' @example man/examples/NowcastProcessed_example.R
 #' @export
 NowcastProcessed <- function(data, dateAnal = NULL, offset = 4, NCdates = NULL, NCsize = 10,  
                              reference_date = "reference_date", report_date = "report_date", 
