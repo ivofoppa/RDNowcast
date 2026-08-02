@@ -1,10 +1,8 @@
 library(dplyr)
 library(RDNowcast)
 
-datean <- as.Date("2025-05-15") ## Day of analysis, here a Thursday 
+NCdates <- NCdates_create(data = NCdata,dateAnal = "2025-05-15", NCperiods = 5)
 
-ncdates <- NCdates_create(data = NCdata,dateAnal = datean)
-
-NC <- Nowcast(data = NCdata, dateAnal = datean, NCdates = ncdates) ### List containing observed (incomplete) and complete data.
+NC <- Nowcast(data = NCdata, dateAnal = as.Date("2025-05-15"), NCdates = NCdates, offset = 4) ### List containing observed (incomplete) and complete data.
 
 head(NC)
