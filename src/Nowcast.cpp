@@ -11,7 +11,7 @@ using namespace Rcpp;
 //' 
 //' @param data A data frame containing data, with one column representing event times and one with reporting times.
 //'     The data should be complete in the sense, that reporting delays no longer play a role. 
-//' @param lastReport A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.
+//' @param dateAnal A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.
 //' @param offset The number of days before lastReport of the most recent reference date considered.
 //' @param NCdates A date vector, representing the dates used for the completeness estimation; these dates have to correspond to the same day of week as lastReport.
 //' @param NCsize An integer, representing the length of the time series in chosen time units, for which completeness estimates should be obtained.
@@ -28,49 +28,49 @@ using namespace Rcpp;
 //' @export
 //' 
 // [[Rcpp::export]]
-IntegerMatrix Nowcast(DataFrame data, Date lastReport, int offset, DateVector NCdates, int NCsize = 10,  
-                          String reference_date = "reference_date", String report_date = "report_date", 
-                          String unit = "week", int nsamples = 100000) {
+IntegerMatrix Nowcast(DataFrame data, Date dateAnal, int offset, DateVector NCdates, int NCsize = 10,  
+                      String reference_date = "reference_date", String report_date = "report_date", 
+                      String unit = "week", int nsamples = 100000) {
   
   DateVector rpdates = data[report_date], evdates = data[reference_date],analdates(NCsize);
-  //Date dte, lastReport = max(rpdates) + 1;
+  //Date dte, dateAnal = max(rpdates) + 1;
   Date dte;
   
-  if(lastReport > Date(max(rpdates))) 
-    Rcpp::stop("Date parameter cannot be larger than most recent report_date!");
+  if(dateAnal > Date(max(rpdates) + 1)) 
+    Rcpp::stop("Date parameter cannot be larger than most recent report_date + 1!");
   
   for(DateVector::iterator d=NCdates.begin(); d!=NCdates.end(); ++d) {
-  if(Date(*d) > Date(max(rpdates)))
-    Rcpp::stop("None of the nowcasting times can be later that max. report_date!");
-  if(Date(*d).getWeekday() != lastReport.getWeekday())
-    Rcpp::stop("All nowcasting dates have to be the same day of week as lastReport!");
-}
-
-IntegerVector countVec;
-int mult;
-
-if (unit=="day") {
-  mult = 1;
-} else {
-  mult = 7;
-}
-
-for(int i=0;i<NCsize;i++) {
-  analdates[i] = Date(lastReport + -offset + -mult*(i + 1));
-}
-analdates = rev(analdates);
-
-for(DateVector::iterator d = analdates.begin(); d != analdates.end(); ++d) {
-  dte = Date(*d);
+    if(Date(*d) > Date(max(rpdates) + 1))
+      Rcpp::stop("None of the nowcasting times can be later that max. report_date + 1!");
+    if(Date(*d).getWeekday() != dateAnal.getWeekday())
+      Rcpp::stop("All nowcasting dates have to be the same day of week as dateAnal!");
+  }
   
-  DateVector repdatessub(evdates[ (evdates>dte) & (evdates<= Date(dte + mult)) & (rpdates <= Date(lastReport)) ]);
-  countVec.push_back(repdatessub.length());
-}
-
-//NumericMatrix pmat = NowcastProb(data = data, NCdates = NCdates, offset = offset, NCsize = NCsize, reference_date = reference_date, 
-//                                 report_date = report_date, unit = unit,nsamples = nsamples);
-NumericMatrix pmat = NowcastProb(data, NCdates, offset, NCsize, reference_date, report_date, unit, nsamples);
-IntegerMatrix N_full = f_N_arr(countVec, pmat);
-// Next code is interpreted as rbeta(full=10, shape1=alpha, shape2=beta)
-return N_full;
+  IntegerVector countVec;
+  int mult;
+  
+  if (unit=="day") {
+    mult = 1;
+  } else {
+    mult = 7;
+  }
+  
+  for(int i=0;i<NCsize;i++) {
+    analdates[i] = Date(dateAnal + -offset + -mult*(i));
+  }
+  analdates = rev(analdates);
+  
+  for(DateVector::iterator d = analdates.begin(); d != analdates.end(); ++d) {
+    dte = Date(*d);
+    
+    DateVector repdatessub(evdates[ (evdates>=dte) & (evdates< (dte + mult)) & (rpdates < Date(dateAnal)) ]);
+    countVec.push_back(repdatessub.length());
+  }
+  
+  //NumericMatrix pmat = NowcastProb(data = data, NCdates = NCdates, offset = offset, NCsize = NCsize, reference_date = reference_date, 
+  //                                 report_date = report_date, unit = unit,nsamples = nsamples);
+  NumericMatrix pmat = NowcastProb(data, NCdates, offset, NCsize, reference_date, report_date, unit, nsamples);
+  IntegerMatrix N_full = f_N_arr(countVec, pmat);
+  // Next code is interpreted as rbeta(full=10, shape1=alpha, shape2=beta)
+  return N_full;
 }

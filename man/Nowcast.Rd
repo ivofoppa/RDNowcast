@@ -22,9 +22,9 @@ The data should be complete in the sense, that reporting delays no longer play a
 
 \item{dateAnal}{A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.}
 
-\item{offset}{The number of days before dateAnal of the most recent reference date considered.}
+\item{offset}{The number of days before lastReport of the most recent reference date considered.}
 
-\item{NCdates}{A date vector, representing the dates used for the completeness estimation; these dates have to correspond to the same day of week as dateAnal.}
+\item{NCdates}{A date vector, representing the dates used for the completeness estimation; these dates have to correspond to the same day of week as lastReport.}
 
 \item{NCsize}{An integer, representing the length of the time series in chosen time units, for which completeness estimates should be obtained.}
 
