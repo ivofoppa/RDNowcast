@@ -86,8 +86,9 @@ NowcastProcessed <- function(data, dateAnal = NULL, recentRef = NULL, NCdates = 
   
   if (unit=="week") {
     mult <- 7;
+
     dateseq <- seq.Date(recentRef - mult*(NCsize),length.out = NCsize,by="week") + 1
-    
+
     n_obs <- data |> ### die "simulierten" Analysedaten (nach gewählter zeitl. Perspektive)
       filter(reference_date <= recentRef,
              report_date < dateAnal) |> 
@@ -97,8 +98,8 @@ NowcastProcessed <- function(data, dateAnal = NULL, recentRef = NULL, NCdates = 
       slice_tail(n = NCsize) |> pull(n) |> unlist() |> as.vector()
   } else {
     mult <- 1;
-    dateseq <- seq.Date(recentRef - mult*(NCsize)+1,length.out = NCsize,by="day")
-    
+    dateseq <- seq.Date(recentRef - mult*(NCsize),length.out = NCsize,by="day") + 1
+
     n_obs <- data |> ### die "simulierten" Analysedaten (nach gewählter zeitl. Perspektive)
       filter(reference_date <= recentRef,
              report_date < dateAnal) |> 
