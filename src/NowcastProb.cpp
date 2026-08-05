@@ -50,7 +50,7 @@ using namespace Rcpp;
      IntegerVector countVec(NCsize), countVecRep(NCsize);
      
      for(int i=0; i<NCsize; i++) {
-       dte = Date(*d + -offset + -((i + 1)*mult));
+       dte = Date(*d + -offset + -((i)*mult));
        
        DateVector repdatessub(evdates[ (evdates>=dte) & (evdates< (dte + mult)) & (rpdates < Date(*d)) ]);
        DateVector evdatessub(evdates[ (evdates>=(dte)) & (evdates< (dte + mult))]);

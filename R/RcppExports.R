@@ -9,7 +9,7 @@
 #' 
 #' @param data A data frame containing data, with one column representing event times and one with reporting times.
 #'     The data should be complete in the sense, that reporting delays no longer play a role. 
-#' @param lastReport A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.
+#' @param dateAnal A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.
 #' @param offset The number of days before lastReport of the most recent reference date considered.
 #' @param NCdates A date vector, representing the dates used for the completeness estimation; these dates have to correspond to the same day of week as lastReport.
 #' @param NCsize An integer, representing the length of the time series in chosen time units, for which completeness estimates should be obtained.
@@ -25,8 +25,8 @@
 #' 
 #' @export
 #' 
-Nowcast <- function(data, lastReport, offset, NCdates, NCsize = 10L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
-    .Call(`_RDNowcast_Nowcast`, data, lastReport, offset, NCdates, NCsize, reference_date, report_date, unit, nsamples)
+Nowcast <- function(data, dateAnal, offset, NCdates, NCsize = 10L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
+    .Call(`_RDNowcast_Nowcast`, data, dateAnal, offset, NCdates, NCsize, reference_date, report_date, unit, nsamples)
 }
 
 #' Generates data for posterior probabilities for Nowcasting
