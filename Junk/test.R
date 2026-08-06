@@ -1,69 +1,93 @@
-if (R::dbinom(x, x, pmax, false) > tol) {
-  stn = x;
-} else {
-  stn = x + 1;
-  while (R::dbinom(x, stn, pmax, false) < tol) {
-    stn++;
-  }
-}
+rm(list = ls())
+paketmussliste <- c("dplyr","tidyr","lubridate","data.table","stringr") ### diese Pakete werden benötigt
+paketegeladen <- pacman::p_loaded() ### Diese Pakete sind schon geladen
+paketliste <- setdiff(paketmussliste,paketegeladen) ### Diese Pakete müssen noch geladen werden!
 
-endn = stn + 1;
-while (R::dbinom(x, endn, pmax, false) > tol) {
-  endn++;
-}
-k <- 18
-pvec <- samples[,k]
-pmax <- max(pvec)
-pmin <- min(pvec)
+pacman::p_load(char = paketliste, install = FALSE)
 
-x <- analysedata$n[k]
+importpfad <- "/home/ifoppa/Downloads"
 
-dbinom(x, x, pmax)
+# Setzen des aktuellen Datums
+# Setzen der Working Directory
+## Neue Sterblichkeitsdaten holen, wenn vorhanden
+#rm(list = ls())
+#https://erhebungsportal.estatistik.de/Erhebungsportal/Erhebungsportal.html#
+###################################################################################################
 
-p <- .5;ns <- 10000;x <- 100
-
-ls <- f_N_vec(x,rep(p,ns))
-       
-ls2 <- rpois(ns,rgamma(ns,x+1,1)/p)
-
-median(ls2)
-ls |> quantile(probs = c(.5,.025,.0975))
-stn <- x+1
-endn = x + 1
-tol = 1e-20
-
-while (dbinom(x, stn, pmax) < tol) {
-    stn <- stn+1
-  }
+  ###################################################################################################
+  ###  Zufügen der aktuellen Daten   ################################################################
+  ###################################################################################################
+  user_auth <- list(
+    username = "mortsurv@hlfgp.hessen.de",
+    password = "Ai5kF!23"
+  )
   
-endn = stn + 1;
-while (dbinom(x, endn, pmin) < tol) {
-  endn <- endn + 1
-}
+  df_nachrichten <- get_nachrichten(user_auth = user_auth) |>
+    get_anhaenge_info(user_auth = user_auth)
+  
+  df_nachrichten_downloaded <- df_nachrichten |>
+    filter(absender == "Sterbefalldaten RKI") |>
+    slice_max(versanddatum) |> 
+    download_anhaenge(user_auth = user_auth, path = importpfad)
+  
+    
+    unzip(file.path(importpfad,df_nachrichten_downloaded$anhang_dateiname),exdir = importpfad)
+    
+  dateinme0 <- list.files(path=importpfad,pattern = "Land_06_basis",full.names = TRUE) |> 
+    file.info() |> slice_max(mtime) |> 
+    row.names()
+###################################################################################################
+###################################################################################################
+  daten <- fread(dateinme0,quote = "\"",sep = "auto") %>% rename_all(tolower) %>%
+    # mutate(across(eingang:sterbedatum,~as_date(.x,format = "%Y%m%d")))
+    mutate(across(c(eingang,sterbedatum), ~ as.Date(as.character(.x),"%Y%m%d")),
+           woche = floor_date(sterbedatum,unit = "week",week_start = 1)) |> 
+    filter(!is.na(eingang),!is.na(sterbedatum)) |> 
+    mutate(reference_date = sterbedatum,report_date =eingang)
+  
+  daten <- daten %>%
+    # mutate(across(eingang:sterbedatum,~as_date(.x,format = "%Y%m%d")))
+    mutate(across(c(reference_date,report_date), ~ as.Date()),
+           woche = floor_date(reference_date,unit = "week",week_start = 1))
+  
+### Definition der Referenzperiode 
+vgldatum1 <- ymd(str_c(year(heute0)-1,"-05-01"))
+vgldatum2 <- ymd(str_c(year(heute0)-1,"-05-30"))
 
-k <- 19;l <- 20
-ls <- f_N_vec(x,rep(pmax,2))
+###################################################################################################
+##  Verarbeiten der Daten, holen der Temperaturdaten, Nowcast und erzeugen von Grafiken  ##########
+###################################################################################################
+# Aggregieren nach Sterbedatum --------------------------------------------
 
-sourceCpp("~/Projects/GitHub/RDNowcast/Junk/TestNowcastProb.cpp")
-sourceCpp("~/Projects/GitHub/RDNowcast/Junk/TestNowcastTest.cpp")
+heute0 <- today()
+ncdates <- NCdates_create(data = daten, NCdatesProp = seq.Date(heute0 - 364 -5*7,heute0 - 364 +5*7,by = "week"),dateAnal = heute0)
 
-data <- RDNowcast::RDdata
-datum1 <- today()-5- 26*7
+schaetzwerte_tag <- NowcastProcessed(data = daten,dateAnal = heute0,recentRef = heute0-1, NCsize = 30,unit = "day",cnames = c("sm","sll","sul","o"),reference_date = "sterbedatum",
+                                         report_date = "eingang",tu_lab = "sterbedatum",
+                                         NCdates = ncdates)
+### Wochenanalyse
 
-NCdates <- seq.Date(datum1-14,length.out = 4,by = "weeks")
+vergleichsdaten <- daten |>  
+  filter(woche >= vgldatum1,woche <= vgldatum2) |> 
+  group_by(woche) |> 
+  summarize(n = n())
 
-NCsize = 10  
-reference_date = "reference_date"; report_date = "report_date" 
+# options(mc.cores = parallel::detectCores())
+# rstan_options(auto_write = TRUE)
+# 
 
-obs <- Nowcastobs(data = data,NCdates = NCdates)
-full <- Nowcastfull(data = data,NCdates = NCdates)
+vgl <- sapply(vergleichsdaten$n, function(n) rSample(n)) |> unlist() |> as.vector()
 
+vglul <- quantile(vgl,probs = 0.975,type = 4) |> unlist() |> as.vector()
 
+nc_woche_datei <- file.path(resultatepfad,"Nowcast","nowcast_woche.csv")
+nc_woche_datum <- nc_woche_datei |> file.info() |> pull(mtime)
 
-t1 <- Sys.time()
-pmat <- pSampleMult(NC)
-t2 <- Sys.time();t2-t1
+ncdates <- NCdates_create(data = daten, NCdatesProp = seq.Date(heute0 - 364 -5*7,heute0 - 364 +5*7,by = "week"),
+                          dateAnal = heute0)
 
-t1 <- Sys.time()
-pmatC <- pSampleMultC(NC)
-t2 <- Sys.time();t2-t1
+schaetzwerte_woche <- NowcastProcessed(data = daten,dateAnal = heute0, recentRef = heute0-4, NCsize = 10,unit = "week",cnames = c("sm","sll","sul","o"),tu_lab = "woche",
+                                       NCdates = ncdates)
+write.csv2(schaetzwerte_woche,file = nc_woche_datei,row.names = FALSE)
+  
+

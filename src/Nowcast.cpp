@@ -56,7 +56,7 @@ IntegerMatrix Nowcast(DataFrame data, Date dateAnal, int offset, DateVector NCda
   }
   
   for(int i=0;i<NCsize;i++) {
-    analdates[i] = Date(dateAnal + -offset + -mult*(i));
+    analdates[i] = Date(dateAnal + -offset + -mult*(i + 1));
   }
   analdates = rev(analdates);
   
