@@ -10,9 +10,6 @@ using namespace Rcpp;
  //' 
  //' @param df A data frame containing data, with one column representing event times and one with reporting times.
  //'     The data should be complete in the sense, that reporting delays no longer play a role. 
- //' @param NCdates A vector of dates, same weekday as date of analysis, that are used for completeness estimates.
- //' @param offset An integer, representing how many days before the day of analysis the most recent reference_date to consider
- //' @param week_start An integer, the weekday of the week start (1: Sunday, etc.).
  //' @param NCsize An integer, representing the length of the time series in chosen time units, for which completeness estimates should be obtained.
  //' @param NCperiod The numbers of weeks used for data generation. By default 52 weeks.
  //' @param reference_date A string variable representing the name of the column with event dates.
@@ -25,19 +22,20 @@ using namespace Rcpp;
  //' @export
  //' 
  // [[Rcpp::export]]
- NumericMatrix NowcastProb2(DataFrame data, DateVector NCdates, int offset, int week_start = 2, int NCsize = 10,  
+ NumericMatrix NowcastProb(DataFrame data, DateVector NCdates, int offset, int NCsize = 10,  
                            String reference_date = "reference_date", String report_date = "report_date", 
                            String unit = "week",int nsamples = 100000) {
    
    DateVector evdates = data[reference_date];
    DateVector rpdates = data[report_date];
    DateVector NCdatessrt = rev(sort_unique(NCdates));
+   Date dataAnal = NCdatessrt.front();
    double alpha;
    double beta;
    
    Date dte;
    int mult, NCperiod = NCdatessrt.length(),
-     nsamplesprop = ceil(nsamples/NCperiod), offset2 = 0;
+     nsamplesprop = ceil(nsamples/NCperiod);
    
    IntegerMatrix obs(NCperiod,NCsize);
    IntegerMatrix full(NCperiod,NCsize);
@@ -46,10 +44,6 @@ using namespace Rcpp;
      mult = 1;
    } else {
      mult = 7;
-     int d = 0;
-     while(Date(NCdates(0) - d).getWeekday()!=) {
-       
-     }
    }
    int k = 0;
    for(DateVector::iterator d = NCdatessrt.begin(); d != NCdatessrt.end(); ++d) {
@@ -57,7 +51,7 @@ using namespace Rcpp;
      IntegerVector countVec(NCsize), countVecRep(NCsize);
      
      for(int i=0; i<NCsize; i++) {
-       dte = Date(*d + -offset + -((i)*mult));
+       dte = Date(*d + -offset + -((i + 1)*mult));
        
        DateVector repdatessub(evdates[ (evdates>=dte) & (evdates< (dte + mult)) & (rpdates < Date(*d)) ]);
        DateVector evdatessub(evdates[ (evdates>=(dte)) & (evdates< (dte + mult))]);
