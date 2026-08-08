@@ -25,7 +25,7 @@
 #' @returns A table with quantiles of the MCMC samples per date.
 #' @example man/examples/NowcastProcessed_example.R
 #' @export
-NowcastProcessed <- function(data, dateAnal = NULL, recentRef = NULL, NCdates = NULL, NCsize = 10,  
+NowcastProcessed <- function(data, dateAnal = NULL, recentRef = NULL, NCdates = NULL, NCsize = 10, week_start = 2,
                              reference_date = "reference_date", report_date = "report_date", 
                              unit = "week",nsamples = 100000, probs = c(0.025,0.975),
                              fd_distance = 20, NCperiods = 52, cnames = c("median","lowerCrI","upperCrI","observed"),tu_lab = "week") {
@@ -80,7 +80,7 @@ NowcastProcessed <- function(data, dateAnal = NULL, recentRef = NULL, NCdates = 
   
   offset <- (dateAnal - recentRef) |> as.integer()
   
-  NC <- Nowcast(data = data, dateAnal = dateAnal, offset = offset, NCdates = NCdates, NCsize = NCsize,  
+  NC <- Nowcast(df = data, dateAnal = dateAnal, offset = offset, week_start = week_start, NCdates = NCdates, NCsize = NCsize,  
                 reference_date = "reference_date", report_date = "report_date", 
                 unit = unit, nsamples = nsamples) 
   

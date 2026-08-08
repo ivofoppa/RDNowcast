@@ -7,10 +7,11 @@
 #' This function generates the numbers used for data completeness estimation and generates posterior completeness probabilities for Nowcasting full numbers. The data used for this are reconstructed from historical data
 #'     for which reporting delay no longer has a relevant effect. 
 #' 
-#' @param data A data frame containing data, with one column representing event times and one with reporting times.
+#' @param df A data frame containing data, with one column representing event times and one with reporting times.
 #'     The data should be complete in the sense, that reporting delays no longer play a role. 
 #' @param dateAnal A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.
 #' @param offset The number of days before lastReport of the most recent reference date considered.
+#' @param week_start An integer, denoting start of the week (1: Sunday); default value is 2 (Monday).
 #' @param NCdates A date vector, representing the dates used for the completeness estimation; these dates have to correspond to the same day of week as lastReport.
 #' @param NCsize An integer, representing the length of the time series in chosen time units, for which completeness estimates should be obtained.
 #' @param NCperiod The numbers of weeks (data sets) used for completeness estimation. By default 52 weeks. A data set consists of observed counts for a time series of length \code{NCsize} time units.
@@ -25,15 +26,32 @@
 #' 
 #' @export
 #' 
-Nowcast <- function(data, dateAnal, offset, NCdates, NCsize = 10L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
-    .Call(`_RDNowcast_Nowcast`, data, dateAnal, offset, NCdates, NCsize, reference_date, report_date, unit, nsamples)
+Nowcast <- function(df, dateAnal, offset, NCdates, week_start = 2L, NCsize = 10L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
+    .Call(`_RDNowcast_Nowcast`, df, dateAnal, offset, NCdates, week_start, NCsize, reference_date, report_date, unit, nsamples)
 }
 
 #' Generates data for posterior probabilities for Nowcasting
-NULL
-
-NowcastProb <- function(data, NCdates, offset, NCsize = 10L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
-    .Call(`_RDNowcast_NowcastProb`, data, NCdates, offset, NCsize, reference_date, report_date, unit, nsamples)
+#'  
+#' @description
+#' This function generates the numbers used for data completeness estimation and generates posterior completeness probabilities for Nowcasting full numbers.
+#' 
+#' @param df A data frame containing data, with one column representing event times and one with reporting times.
+#'     The data should be complete in the sense, that reporting delays no longer play a role. 
+#' @param NCdates A date vector of the historical dates of the same day of week as the date of analysis, for which the data can be assumed to be complete. 
+#' @param offset An integer, the number of days before the date of analysis the most recent events are to be considered. 
+#' @param week_start An integer, denoting start of the week (1: Sunday); default value is 2 (Monday).
+#' @param NCsize An integer, representing the length of the time series in chosen time units, for which completeness estimates should be obtained.
+#' @param reference_date A string variable representing the name of the column with event dates.
+#' @param report_date A string variable representing the name of the column with reporting dates.
+#' @param unit String representing time unit of analysis, week ("week") vs. day ("day").
+#' @param nsamples An integer of default 100,000, representing the number of samples from the posterior distributions.
+#' @returns A numerical array, each column representing posterior samples of the completeness distribution for a particular nowcast value. The last column represents the most recent number to be nowcasted. 
+#' @example man/examples/NowcastProb_example.R
+#' 
+#' @export
+#' 
+NowcastProb <- function(df, NCdates, offset, week_start = 2L, NCsize = 10L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
+    .Call(`_RDNowcast_NowcastProb`, df, NCdates, offset, week_start, NCsize, reference_date, report_date, unit, nsamples)
 }
 
 #' Generates a vector of filled-in numbers 
@@ -61,34 +79,5 @@ f_N_vec <- function(x, pvec) {
 #' 
 f_N_arr <- function(xvec, pmat) {
     .Call(`_RDNowcast_f_N_arr`, xvec, pmat)
-}
-
-#' Generates data for posterior probabilities for Nowcasting
-#'  
-#' @description
-#' This function generates the numbers used for data completeness estimation and generates posterior completeness probabilities for Nowcasting full numbers. The data used for this are reconstructed from historical data
-#'     for which reporting delay no longer has a relevant effect. 
-#' 
-#' @param data A data frame containing data, with one column representing event times and one with reporting times.
-#'     The data should be complete in the sense, that reporting delays no longer play a role. 
-#' @param dateAnal A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.
-#' @param offset The number of days before dateAnal of the most recent reference date considered.
-#' @param NCdates A date vector, representing the dates used for the completeness estimation; these dates have to correspond to the same day of week as dateAnal.
-#' @param NCsize An integer, representing the length of the time series in chosen time units, for which completeness estimates should be obtained.
-#' @param NCperiod The numbers of weeks (data sets) used for completeness estimation. By default 52 weeks. A data set consists of observed counts for a time series of length \code{NCsize} time units.
-#'     These count have the same temporal relationship to the hypothetical time of analysis we have no to the data to be nowcasted. The second component is the complete data.
-#'     These numbers can be generated from a data for which reporting delay no longer has a relevant effect. 
-#' @param reference_date A string variable representing the name of the column with event dates.
-#' @param report_date A string variable representing the name of the column with reporting dates.
-#' @param unit String representing time unit of analysis, week ("week") vs. day ("day").
-#' @param nsamples An integer of default 100,000, representing the number of samples from the posterior distributions.
-#' @returns A list with two integer arrays of dimensions \code{NCperiod} \eqn{\times} NCsize; the first with the reported, the second with the full numbers. 
-NULL
-
-#' 
-#' @export
-#' 
-Test <- function(data, dateAnal, offset, NCdates, NCsize = 10L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
-    .Call(`_RDNowcast_Test`, data, dateAnal, offset, NCdates, NCsize, reference_date, report_date, unit, nsamples)
 }
 
