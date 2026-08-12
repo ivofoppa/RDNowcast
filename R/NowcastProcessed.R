@@ -63,6 +63,7 @@ NowcastProcessed <- function(data, dateAnal = NULL, recentRef = NULL, NCdates = 
   }
   
   if(is.null(recentRef)) {
+    recentRef <- dateAnal - 1
     if(wday(dateAnal) %in% 1:2) {
       while(wday(recentRef)!=6) {
         recentRef <- recentRef - 1
@@ -87,14 +88,18 @@ NowcastProcessed <- function(data, dateAnal = NULL, recentRef = NULL, NCdates = 
   begweek <- recentRef + 1
   
   while(wday(begweek)!=week_start) {
-  begweek <- begweek - 1
+    begweek <- begweek - 1
   }
   
   if (unit=="week") {
     mult <- 7;
-
-    dateseq <- seq.Date(begweek - mult*(NCsize - 1),length.out = NCsize,by="week")
-
+    
+    if(week(dateAnal) > week(recentRef)) {
+      
+      dateseq <- seq.Date(begweek - mult*NCsize,length.out = NCsize,by="week")
+    } else if (week(dateAnal)==week(recentRef)) {
+      dateseq <- seq.Date(begweek - mult*(NCsize-1),length.out = NCsize,by="week")
+    }
     n_obs <- data |> ### die "simulierten" Analysedaten (nach gewählter zeitl. Perspektive)
       filter(reference_date <= recentRef,
              report_date < dateAnal) |> 
@@ -105,7 +110,7 @@ NowcastProcessed <- function(data, dateAnal = NULL, recentRef = NULL, NCdates = 
   } else {
     mult <- 1;
     dateseq <- seq.Date(recentRef - mult*(NCsize - 1),length.out = NCsize,by="day")
-
+    
     n_obs <- data |> ### die "simulierten" Analysedaten (nach gewählter zeitl. Perspektive)
       filter(reference_date <= recentRef,
              report_date < dateAnal) |> 
