@@ -18,7 +18,7 @@ using namespace Rcpp;
 //' @param unit String representing time unit of analysis, week ("week") vs. day ("day").
 //' @param nsamples An integer of default 100,000, representing the number of samples from the posterior distributions.
 //' @returns A numerical array, each column representing posterior samples of the completeness distribution for a particular nowcast value. The last column represents the most recent number to be nowcasted. 
-//' @example man/examples/NowcastProb_example.R
+//' @example man/examples/NowcastFull_example.R
 //' 
 //' @export
 //' 
