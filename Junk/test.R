@@ -48,8 +48,10 @@ importpfad <- "/home/ifoppa/Downloads"
 # heute0 <- today()
   
 heute0 <- as.Date("2026-08-03")
+
+dateAnal <- daten$report_date |> max() + 1
 ### Definition der Referenzperiode 
-vgldatum1 <- ymd(str_c(year(heute0)-1,"-05-01"))
+vgldatum1 <- ymd(str_c(year(da)-1,"-05-01"))
 vgldatum2 <- ymd(str_c(year(heute0)-1,"-05-30"))
 
 ###################################################################################################
@@ -78,13 +80,18 @@ vgl <- sapply(vergleichsdaten$n, function(n) rSample(n)) |> unlist() |> as.vecto
 
 vglul <- quantile(vgl,probs = 0.975,type = 4) |> unlist() |> as.vector()
 
-ncdates <- NCdates_create(data = daten, NCdatesProp = seq.Date(heute0 - 364 -5*7,heute0 - 364 +5*7,by = "week"),
-                          dateAnal = heute0)
+ncdates <- NCdates_create(data = daten, NCdatesProp = seq.Date(dateAnal - 364 -5*7,dateAnal - 364 +5*7,by = "week"),
+                          dateAnal = dateAnal)
 
-dateAnal <- as.Date("2026-08-04")
+# dateAnal <- as.Date("2026-08-04")
 
-schaetzwerte_woche <- NowcastProcessed(data = daten,dateAnal = dateAnal, recentRef = dateAnal-5, 
-                                       NCsize = 10,unit = "week",cnames = c("n","ll","ul","o"),tu_lab = "woche",
+recentRef <- dateAnal - 1
+
+schaetzwerte_woche <- NowcastFull(df = daten,dateAnal = dateAnal, recentRef = dateAnal-1, 
+                                       NCsize = 10,unit = "week",
                                        NCdates = ncdates)
-write.csv2(schaetzwerte_woche,file = "Nowcast_woche.csv",row.names = FALSE)
+
+nobs <- daten |> 
+  filter(report_date<dateAnal,reference_date<=(dateAnal-1)) |> 
+  group_by(woche) |> summarise(n = n()) |> slice_tail(n = 10) |> pull(n)
 

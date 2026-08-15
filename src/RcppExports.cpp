@@ -30,6 +30,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// NowcastFull
+IntegerMatrix NowcastFull(DataFrame df, Date dateAnal, Date recentRef, DateVector NCdates, int week_start, int NCsize, String reference_date, String report_date, String unit, int nsamples);
+RcppExport SEXP _RDNowcast_NowcastFull(SEXP dfSEXP, SEXP dateAnalSEXP, SEXP recentRefSEXP, SEXP NCdatesSEXP, SEXP week_startSEXP, SEXP NCsizeSEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP unitSEXP, SEXP nsamplesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
+    Rcpp::traits::input_parameter< Date >::type dateAnal(dateAnalSEXP);
+    Rcpp::traits::input_parameter< Date >::type recentRef(recentRefSEXP);
+    Rcpp::traits::input_parameter< DateVector >::type NCdates(NCdatesSEXP);
+    Rcpp::traits::input_parameter< int >::type week_start(week_startSEXP);
+    Rcpp::traits::input_parameter< int >::type NCsize(NCsizeSEXP);
+    Rcpp::traits::input_parameter< String >::type reference_date(reference_dateSEXP);
+    Rcpp::traits::input_parameter< String >::type report_date(report_dateSEXP);
+    Rcpp::traits::input_parameter< String >::type unit(unitSEXP);
+    Rcpp::traits::input_parameter< int >::type nsamples(nsamplesSEXP);
+    rcpp_result_gen = Rcpp::wrap(NowcastFull(df, dateAnal, recentRef, NCdates, week_start, NCsize, reference_date, report_date, unit, nsamples));
+    return rcpp_result_gen;
+END_RCPP
+}
 // NowcastProb
 NumericMatrix NowcastProb(DataFrame df, DateVector NCdates, int offset, int week_start, int NCsize, String reference_date, String report_date, String unit, int nsamples);
 RcppExport SEXP _RDNowcast_NowcastProb(SEXP dfSEXP, SEXP NCdatesSEXP, SEXP offsetSEXP, SEXP week_startSEXP, SEXP NCsizeSEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP unitSEXP, SEXP nsamplesSEXP) {
@@ -76,6 +96,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_RDNowcast_Nowcast", (DL_FUNC) &_RDNowcast_Nowcast, 10},
+    {"_RDNowcast_NowcastFull", (DL_FUNC) &_RDNowcast_NowcastFull, 10},
     {"_RDNowcast_NowcastProb", (DL_FUNC) &_RDNowcast_NowcastProb, 9},
     {"_RDNowcast_f_N_vec", (DL_FUNC) &_RDNowcast_f_N_vec, 2},
     {"_RDNowcast_f_N_arr", (DL_FUNC) &_RDNowcast_f_N_arr, 2},
