@@ -1,5 +1,5 @@
 # rm(list = ls())
-paketmussliste <- c("dplyr","tidyr","lubridate","data.table","stringr") ### diese Pakete werden benötigt
+paketmussliste <- c("dplyr","tidyr","lubridate","data.table","stringr","estatistikR") ### diese Pakete werden benötigt
 paketegeladen <- pacman::p_loaded() ### Diese Pakete sind schon geladen
 paketliste <- setdiff(paketmussliste,paketegeladen) ### Diese Pakete müssen noch geladen werden!
 
@@ -17,21 +17,21 @@ importpfad <- "/home/ifoppa/Downloads"
   ###################################################################################################
   ###  Zufügen der aktuellen Daten   ################################################################
   # ###################################################################################################
-  # user_auth <- list(
-  #   username = "mortsurv@hlfgp.hessen.de",
-  #   password = "Ai5kF!23"
-  # )
-  # 
-  # df_nachrichten <- get_nachrichten(user_auth = user_auth) |>
-  #   get_anhaenge_info(user_auth = user_auth)
-  # 
-  # df_nachrichten_downloaded <- df_nachrichten |>
-  #   filter(absender == "Sterbefalldaten RKI") |>
-  #   slice_max(versanddatum) |> 
-  #   download_anhaenge(user_auth = user_auth, path = importpfad)
-  # 
-  #   
-  #   unzip(file.path(importpfad,df_nachrichten_downloaded$anhang_dateiname),exdir = importpfad)
+  user_auth <- list(
+    username = "mortsurv@hlfgp.hessen.de",
+    password = "Ai5kF!23"
+  )
+
+  df_nachrichten <- get_nachrichten(user_auth = user_auth) |>
+    get_anhaenge_info(user_auth = user_auth)
+
+  df_nachrichten_downloaded <- df_nachrichten |>
+    filter(absender == "Sterbefalldaten RKI") |>
+    slice_max(versanddatum) |>
+    download_anhaenge(user_auth = user_auth, path = importpfad)
+
+
+    unzip(file.path(importpfad,df_nachrichten_downloaded$anhang_dateiname),exdir = importpfad)
     
   dateinme0 <- list.files(path=importpfad,pattern = "Land_06_basis",full.names = TRUE) |> 
     file.info() |> slice_max(mtime) |> 
@@ -49,9 +49,9 @@ importpfad <- "/home/ifoppa/Downloads"
   
 heute0 <- as.Date("2026-08-03")
 
-dateAnal <- daten$report_date |> max() + 1
+dateAnal <- daten$report_date |> max() + 1-2-56
 ### Definition der Referenzperiode 
-vgldatum1 <- ymd(str_c(year(da)-1,"-05-01"))
+vgldatum1 <- ymd(str_c(year(da),"-05-01"))
 vgldatum2 <- ymd(str_c(year(heute0)-1,"-05-30"))
 
 ###################################################################################################
@@ -59,9 +59,9 @@ vgldatum2 <- ymd(str_c(year(heute0)-1,"-05-30"))
 ###################################################################################################
 # Aggregieren nach Sterbedatum --------------------------------------------
 
-ncdates <- NCdates_create(data = daten, NCdatesProp = seq.Date(heute0 - 364 -5*7,heute0 - 364 +5*7,by = "week"),dateAnal = heute0)
+ncdates <- NCdates_create(data = daten, NCdatesProp = seq.Date(dateAnal - 364 -5*7,dateAnal - 364 +5*7,by = "week"),dateAnal = dateAnal)
 
-schaetzwerte_tag <- NowcastProcessed(data = daten,dateAnal = heute0,recentRef = heute0-3, NCsize = 30,unit = "day",cnames = c("sm","sll","sul","o"),reference_date = "sterbedatum",
+schaetzwerte_woche <- NowcastProcessed(data = daten,dateAnal = dateAnal,recentRef = dateAnal-1, NCsize = 10,unit = "week",cnames = c("sm","sll","sul","o"),reference_date = "sterbedatum",
                                          report_date = "eingang",tu_lab = "sterbedatum",
                                          NCdates = ncdates)
 write.csv2(schaetzwerte_tag,file = "Nowcast_tag.csv")
