@@ -81,7 +81,7 @@ NowcastProcessed <- function(data, dateAnal = NULL, recentRef = NULL, NCdates = 
   
   offset <- (dateAnal - recentRef) |> as.integer()
   
-  NC <- Nowcast(df = data, dateAnal = dateAnal, offset = offset, week_start = week_start, NCdates = NCdates, NCsize = NCsize,  
+  NC <- NowcastFull(data = data, dateAnal = dateAnal, recentRef = recentRef, week_start = week_start, NCdates = NCdates, NCsize = NCsize,  
                 reference_date = "reference_date", report_date = "report_date", 
                 unit = unit, nsamples = nsamples) 
   

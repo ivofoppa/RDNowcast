@@ -7,7 +7,7 @@ using namespace Rcpp;
 //' @description
 //' This function generates the numbers used for data completeness estimation and generates posterior completeness probabilities for Nowcasting full numbers.
 //' 
-//' @param df A data frame containing data, with one column representing event times and one with reporting times.
+//' @param data A data frame containing data, with one column representing event times and one with reporting times.
 //'     The data should be complete in the sense, that reporting delays no longer play a role. 
 //' @param NCdates A date vector of the historical dates of the same day of week as the date of analysis, for which the data can be assumed to be complete. 
 //' @param offset An integer, the number of days before the date of analysis the most recent events are to be considered. 
@@ -23,12 +23,12 @@ using namespace Rcpp;
 //' @export
 //' 
 // [[Rcpp::export]]
-IntegerMatrix NowcastFull(DataFrame df, Date dateAnal, Date recentRef, DateVector NCdates, int week_start = 2, int NCsize = 10,  
+IntegerMatrix NowcastFull(DataFrame data, Date dateAnal, Date recentRef, DateVector NCdates, int week_start = 2, int NCsize = 10,  
                           String reference_date = "reference_date", String report_date = "report_date", 
                           String unit = "week",int nsamples = 100000) {
   
-  DateVector evdates = df[reference_date];
-  DateVector rpdates = df[report_date];
+  DateVector evdates = data[reference_date];
+  DateVector rpdates = data[report_date];
   DateVector NCdatessrt = rev(sort_unique(NCdates));
   NCdatessrt.push_back(dateAnal);
 

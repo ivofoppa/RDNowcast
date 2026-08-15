@@ -31,12 +31,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // NowcastFull
-IntegerMatrix NowcastFull(DataFrame df, Date dateAnal, Date recentRef, DateVector NCdates, int week_start, int NCsize, String reference_date, String report_date, String unit, int nsamples);
-RcppExport SEXP _RDNowcast_NowcastFull(SEXP dfSEXP, SEXP dateAnalSEXP, SEXP recentRefSEXP, SEXP NCdatesSEXP, SEXP week_startSEXP, SEXP NCsizeSEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP unitSEXP, SEXP nsamplesSEXP) {
+IntegerMatrix NowcastFull(DataFrame data, Date dateAnal, Date recentRef, DateVector NCdates, int week_start, int NCsize, String reference_date, String report_date, String unit, int nsamples);
+RcppExport SEXP _RDNowcast_NowcastFull(SEXP dataSEXP, SEXP dateAnalSEXP, SEXP recentRefSEXP, SEXP NCdatesSEXP, SEXP week_startSEXP, SEXP NCsizeSEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP unitSEXP, SEXP nsamplesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP);
     Rcpp::traits::input_parameter< Date >::type dateAnal(dateAnalSEXP);
     Rcpp::traits::input_parameter< Date >::type recentRef(recentRefSEXP);
     Rcpp::traits::input_parameter< DateVector >::type NCdates(NCdatesSEXP);
@@ -46,7 +46,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< String >::type report_date(report_dateSEXP);
     Rcpp::traits::input_parameter< String >::type unit(unitSEXP);
     Rcpp::traits::input_parameter< int >::type nsamples(nsamplesSEXP);
-    rcpp_result_gen = Rcpp::wrap(NowcastFull(df, dateAnal, recentRef, NCdates, week_start, NCsize, reference_date, report_date, unit, nsamples));
+    rcpp_result_gen = Rcpp::wrap(NowcastFull(data, dateAnal, recentRef, NCdates, week_start, NCsize, reference_date, report_date, unit, nsamples));
     return rcpp_result_gen;
 END_RCPP
 }

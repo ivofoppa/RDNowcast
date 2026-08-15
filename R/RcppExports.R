@@ -13,7 +13,7 @@ Nowcast <- function(df, dateAnal, offset, NCdates, week_start = 2L, NCsize = 10L
 #' @description
 #' This function generates the numbers used for data completeness estimation and generates posterior completeness probabilities for Nowcasting full numbers.
 #' 
-#' @param df A data frame containing data, with one column representing event times and one with reporting times.
+#' @param data A data frame containing data, with one column representing event times and one with reporting times.
 #'     The data should be complete in the sense, that reporting delays no longer play a role. 
 #' @param NCdates A date vector of the historical dates of the same day of week as the date of analysis, for which the data can be assumed to be complete. 
 #' @param offset An integer, the number of days before the date of analysis the most recent events are to be considered. 
@@ -28,8 +28,8 @@ Nowcast <- function(df, dateAnal, offset, NCdates, week_start = 2L, NCsize = 10L
 #' 
 #' @export
 #' 
-NowcastFull <- function(df, dateAnal, recentRef, NCdates, week_start = 2L, NCsize = 10L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
-    .Call(`_RDNowcast_NowcastFull`, df, dateAnal, recentRef, NCdates, week_start, NCsize, reference_date, report_date, unit, nsamples)
+NowcastFull <- function(data, dateAnal, recentRef, NCdates, week_start = 2L, NCsize = 10L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
+    .Call(`_RDNowcast_NowcastFull`, data, dateAnal, recentRef, NCdates, week_start, NCsize, reference_date, report_date, unit, nsamples)
 }
 
 #' Generates data for posterior probabilities for Nowcasting
