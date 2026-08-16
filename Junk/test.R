@@ -44,12 +44,16 @@ importpfad <- "/home/ifoppa/Downloads"
            woche = floor_date(sterbedatum,unit = "week",week_start = 1)) |> 
     filter(!is.na(eingang),!is.na(sterbedatum)) |> 
     rename(reference_date = sterbedatum,report_date =eingang) |> 
-    mutate(woche = floor_date(reference_date,unit = "week",week_start = 1))
+    mutate(woche = floor_date(reference_date,unit = "week",week_start = 1)) |> 
+    select(reference_date,report_date)
 # heute0 <- today()
-  
+
+  write.csv(daten,"./data/RDdata.csv",row.names = FALSE)
+    
 heute0 <- as.Date("2026-08-03")
 
 dateAnal <- daten$report_date |> max() + 1-2-56
+dateAnal <- heute0
 ### Definition der Referenzperiode 
 vgldatum1 <- ymd(str_c(year(da),"-05-01"))
 vgldatum2 <- ymd(str_c(year(heute0)-1,"-05-30"))
@@ -61,7 +65,7 @@ vgldatum2 <- ymd(str_c(year(heute0)-1,"-05-30"))
 
 ncdates <- NCdates_create(data = daten, NCdatesProp = seq.Date(dateAnal - 364 -5*7,dateAnal - 364 +5*7,by = "week"),dateAnal = dateAnal)
 
-schaetzwerte_woche <- NowcastProcessed(data = daten,dateAnal = dateAnal,recentRef = dateAnal-1, NCsize = 10,unit = "week",cnames = c("sm","sll","sul","o"),reference_date = "sterbedatum",
+schaetzwerte_woche <- NowcastProcessed(data = daten,dateAnal = dateAnal,recentRef = dateAnal-3, NCsize = 10,unit = "week",cnames = c("sm","sll","sul","o"),reference_date = "sterbedatum",
                                          report_date = "eingang",tu_lab = "sterbedatum",
                                          NCdates = ncdates)
 write.csv2(schaetzwerte_tag,file = "Nowcast_tag.csv")
