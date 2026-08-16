@@ -50,9 +50,9 @@ importpfad <- "/home/ifoppa/Downloads"
 
   write.csv(daten,"./data/RDdata.csv",row.names = FALSE)
     
-heute0 <- as.Date("2026-08-03")
+heute0 <- as.Date( "2026-07-09")
 
-dateAnal <- daten$report_date |> max() + 1-2-56
+# dateAnal <- daten$report_date |> max() + 1-2-56
 dateAnal <- heute0
 ### Definition der Referenzperiode 
 vgldatum1 <- ymd(str_c(year(da),"-05-01"))

@@ -64,14 +64,15 @@ distributions for the full data.
 }
 \examples{
 library(RDNowcast)
-data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAbElEQVR4Xs2RQQrAMAgEfZgf7W9LAguybljJpR3wEse5JOL3ZObDb4x1loDhHbBOFU6i2Ddnw2KNiXcdAXygJlwE8OFVBHDgKrLgSInN4WMe9iXiqIVsTMjH7z/GhNTEibOxQswcYIWYOR/zAjBJfiXh3jZ6AAAAAElFTkSuQmCC
+
 NCdata <- RDNowcast::RDdata  ### Loading the data set from the package
 
-dateAnal <- as.Date("2025-05-15")  ### Setting the date of the analysis; the most recent data were reported one day prior
+dateAnal <- as.Date( "2026-07-09")
 
-NCdates <- NCdates_create(data = NCdata,dateAnal = dateAnal, NCperiods = 5)
+ncdates <- NCdates_create(data = NCdata, NCdatesProp = seq.Date(dateAnal - 364 -5*7,dateAnal - 364 +5*7,by = "week"),dateAnal = dateAnal)
 
-NCproc <- NowcastProcessed(data = NCdata, dateAnal = dateAnal, recentRef = dateAnal - 4, NCsize = 10 ,unit = "week")
+NCproc <- NowcastProcessed(data = NCdata,dateAnal = dateAnal,recentRef = dateAnal-4, NCsize = 10,unit = "week",cnames = c("sm","sll","sul","o"),
+                                       NCdates = ncdates)
 
 NCproc
 }

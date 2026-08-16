@@ -44,12 +44,15 @@ A numerical array, each column representing posterior samples of the completenes
 This function generates the numbers used for data completeness estimation and generates posterior completeness probabilities for Nowcasting full numbers.
 }
 \examples{
-library(dplyr)
 library(RDNowcast)
 
-NCdates <- NCdates_create(data = RDdata,dateAnal = "2025-05-15", NCperiods = 5)
+NCdata <- RDNowcast::RDdata  ### Loading the data set from the package
 
-NC <- NowcastFull(data = NCdata, dateAnal = as.Date("2025-05-15"), recentRef = as.Date("2025-05-15") - 4, NCdates = NCdates) ### List containing observed (incomplete) and complete data.
+dateAnal <- as.Date( "2026-07-09")
+
+ncdates <- NCdates_create(data = NCdata, NCdatesProp = seq.Date(dateAnal - 364 -5*7,dateAnal - 364 +5*7,by = "week"),dateAnal = dateAnal)
+
+NC <- NowcastFull(data = NCdata,dateAnal = dateAnal,recentRef = dateAnal-4, NCsize = 10,unit = "week", NCdates = ncdates)
 
 head(NC)
 }

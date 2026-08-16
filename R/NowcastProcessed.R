@@ -94,10 +94,10 @@ NowcastProcessed <- function(data, dateAnal = NULL, recentRef = NULL, NCdates = 
   if (unit=="week") {
     mult <- 7;
     
-    if(week(dateAnal) > week(recentRef)) {
+    if(isoweek(dateAnal) > isoweek(recentRef)) {
       
       dateseq <- seq.Date(begweek - mult*NCsize,length.out = NCsize,by="week")
-    } else if (week(dateAnal)==week(recentRef)) {
+    } else if (isoweek(dateAnal)==isoweek(recentRef)) {
       dateseq <- seq.Date(begweek - mult*(NCsize-1),length.out = NCsize,by="week")
     }
     n_obs <- data |> ### die "simulierten" Analysedaten (nach gewählter zeitl. Perspektive)
