@@ -82,10 +82,10 @@ NowcastProcessed <- function(data, dateAnal = NULL, recentRef = NULL, NCdates = 
   offset <- (dateAnal - recentRef) |> as.integer()
   
   NC <- NowcastFull(data = data, dateAnal = dateAnal, recentRef = recentRef, week_start = week_start, NCdates = NCdates, NCsize = NCsize,  
-                reference_date = "reference_date", report_date = "report_date", 
-                unit = unit, nsamples = nsamples) 
+                    reference_date = "reference_date", report_date = "report_date", 
+                    unit = unit, nsamples = nsamples) 
   
-  begweek <- recentRef + 1
+  begweek <- recentRef
   
   while(wday(begweek)!=week_start) {
     begweek <- begweek - 1
@@ -94,16 +94,12 @@ NowcastProcessed <- function(data, dateAnal = NULL, recentRef = NULL, NCdates = 
   if (unit=="week") {
     mult <- 7;
     
-    if(isoweek(dateAnal) > isoweek(recentRef)) {
-      
-      dateseq <- seq.Date(begweek - mult*NCsize,length.out = NCsize,by="week")
-    } else if (isoweek(dateAnal)==isoweek(recentRef)) {
-      dateseq <- seq.Date(begweek - mult*(NCsize-1),length.out = NCsize,by="week")
-    }
+    dateseq <- seq.Date(begweek - mult*(NCsize-1),length.out = NCsize,by="week")
+    
     n_obs <- data |> ### die "simulierten" Analysedaten (nach gewählter zeitl. Perspektive)
       filter(reference_date <= recentRef,
              report_date < dateAnal) |> 
-      mutate(week = floor_date(reference_date,unit = "week",week_start =  (wday(recentRef)))) |> 
+      mutate(week = floor_date(reference_date,unit = "week",week_start = week_start - 1)) |> 
       group_by(week) |> 
       summarize(n = n()) |> ungroup() |>
       slice_tail(n = NCsize) |> pull(n) |> unlist() |> as.vector()
