@@ -1,0 +1,75 @@
+---
+title: "A worked nowcasting example"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{A worked nowcasting example}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}---
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = T, comment = "#>")
+options(tibble.print_min = 4, tibble.print_max = 4)
+```
+
+## The data
+
+A data set is included in the `RDNowcast` package:
+
+```{r data, message = FALSE}
+library(dplyr)
+library(RDNowcast)
+library(lubridate)
+library(flextable)
+
+data <- RDNowcast::RDdata
+data |> head(n = 10)
+```
+
+This data set, which consists of dates of death (reference_data) and reporting dates (report_date) can be used to generate nowcast estimates and, if the chosen date of analysis is sufficiently far in the past, to validate these estimates.
+
+## Nowcasting the weekly number of deaths
+
+### Preparing the data
+
+We choose a date of analysis of 2026-04-30, which is a Thursday, one year in the past (i.e. before the most recent death date in the data set). We will nowcast 10 weekly counts, with the most recent count to be nowcasted for the week ending past Sunday (2025-08-10). 
+
+Around the date 364 days before the date of analysis, five dates are chosen each into the past and ahead, separated by one week each and on the same day of the week as the date of analysis. The construction of this series of dates is supported by the function `RDNowcast::RDdates_create`.
+
+These dates form the basis for the 11 overlapping 10-week periods, data from which will be used for training:
+
+```{r data_prep, message = FALSE}
+dateAnal <- as.Date("2025-08-21") # The date, the analysis is conducted
+
+ncdates <- NCdates_create(data = data, NCdatesProp = seq.Date(dateAnal - 364 -5*7,dateAnal - 364 +5*7,by = "week"),
+                            dateAnal = dateAnal)
+
+recentRef <- "2025-08-17" # The most recent death date to be considered; does not have to be the end of a week
+
+```
+
+### Runing the Nowcast
+
+Once the date of analysis and the training time period have been chosen, the nowcast can be performed
+
+```{r nowcast, message = FALSE}
+# Pulling the complete data, not right-censored
+fullData <- data |>  
+  filter(reference_date<=recentRef) |> 
+  mutate(week = floor_date(reference_date, unit = "week", week_start = 1)) |> 
+  group_by(week) |> summarize(n = n()) |> ungroup() |> 
+  tail(n = 10) |> 
+  pull(n)
+
+NCTable <-  NowcastProcessed(data = data, dateAnal = dateAnal, recentRef = recentRef, NCsize = 10,
+                                          unit = "week",cnames = c("n","ll","ul","o"),tu_lab = "woche",NCdates = ncdates) |> 
+  mutate(complete = fullData)
+
+ft <- flextable(NCTable) |> 
+  set_header_labels(values = c( "Week", "Median",  "Lower 95% Cred. Int.",  "Upper 95% Cred. Int.", "observed", "complete")) |> 
+  flextable::align(align = "center", part = "body") |> flextable::colformat_num(big.mark=",", decimal.mark=".")
+ft
+
+
+
+```
