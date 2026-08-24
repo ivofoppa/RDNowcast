@@ -30,6 +30,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// NowcastFull2
+IntegerMatrix NowcastFull2(DataFrame data, Date dateAnal, Date recentRef, DateVector NCdates, int week_start, int NCsize, String reference_date, String report_date, String unit, int nsamples, bool forecast);
+RcppExport SEXP _RDNowcast_NowcastFull2(SEXP dataSEXP, SEXP dateAnalSEXP, SEXP recentRefSEXP, SEXP NCdatesSEXP, SEXP week_startSEXP, SEXP NCsizeSEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP unitSEXP, SEXP nsamplesSEXP, SEXP forecastSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< Date >::type dateAnal(dateAnalSEXP);
+    Rcpp::traits::input_parameter< Date >::type recentRef(recentRefSEXP);
+    Rcpp::traits::input_parameter< DateVector >::type NCdates(NCdatesSEXP);
+    Rcpp::traits::input_parameter< int >::type week_start(week_startSEXP);
+    Rcpp::traits::input_parameter< int >::type NCsize(NCsizeSEXP);
+    Rcpp::traits::input_parameter< String >::type reference_date(reference_dateSEXP);
+    Rcpp::traits::input_parameter< String >::type report_date(report_dateSEXP);
+    Rcpp::traits::input_parameter< String >::type unit(unitSEXP);
+    Rcpp::traits::input_parameter< int >::type nsamples(nsamplesSEXP);
+    Rcpp::traits::input_parameter< bool >::type forecast(forecastSEXP);
+    rcpp_result_gen = Rcpp::wrap(NowcastFull2(data, dateAnal, recentRef, NCdates, week_start, NCsize, reference_date, report_date, unit, nsamples, forecast));
+    return rcpp_result_gen;
+END_RCPP
+}
 // f_N_vec
 IntegerVector f_N_vec(int x, NumericVector pvec);
 RcppExport SEXP _RDNowcast_f_N_vec(SEXP xSEXP, SEXP pvecSEXP) {
@@ -57,6 +78,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_RDNowcast_NowcastFull", (DL_FUNC) &_RDNowcast_NowcastFull, 10},
+    {"_RDNowcast_NowcastFull2", (DL_FUNC) &_RDNowcast_NowcastFull2, 11},
     {"_RDNowcast_f_N_vec", (DL_FUNC) &_RDNowcast_f_N_vec, 2},
     {"_RDNowcast_f_N_arr", (DL_FUNC) &_RDNowcast_f_N_arr, 2},
     {NULL, NULL, 0}

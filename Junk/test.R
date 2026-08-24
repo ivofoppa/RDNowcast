@@ -62,6 +62,9 @@ vgldatum2 <- ymd(str_c(year(heute0)-1,"-05-30"))
 ##  Verarbeiten der Daten, holen der Temperaturdaten, Nowcast und erzeugen von Grafiken  ##########
 ###################################################################################################
 # Aggregieren nach Sterbedatum --------------------------------------------
+daten <- NCdata
+
+dateAnal <- as.Date("2026-08-13") - 364
 
 ncdates <- NCdates_create(data = daten, NCdatesProp = seq.Date(dateAnal - 364 -5*7,dateAnal - 364 +5*7,by = "week"),dateAnal = dateAnal)
 

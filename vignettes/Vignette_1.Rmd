@@ -26,7 +26,7 @@ data <- RDNowcast::RDdata
 data |> head(n = 10)
 ```
 
-This data set, which consists of dates of death (reference_data) and reporting dates (report_date) can be used to generate nowcast estimates and, if the chosen date of analysis is sufficiently far in the past, to validate these estimates.
+This data set, which consists of dates of death (reference_date) and reporting dates (report_date) can be used to generate nowcast estimates and, if the chosen date of analysis is sufficiently far in the past, to validate these estimates.
 
 ## Nowcasting the weekly number of deaths
 
@@ -69,7 +69,8 @@ ft <- flextable(NCTable) |>
   set_header_labels(values = c( "Week", "Median",  "Lower 95% Cred. Int.",  "Upper 95% Cred. Int.", "observed", "complete")) |> 
   flextable::align(align = "center", part = "body") |> flextable::colformat_num(big.mark=",", decimal.mark=".")
 ft
-
-
-
 ```
+
+## Forecasting counts for the current, yet incomplete week
+
+If the most recent date of death to be considered falls in the same week as the date of analysis, the most recent week to be analyzed is not yet over. Instead of a forecast, the "nowcast" of the number of the death in the most recent week actually is a forecast, as there is no information on the numbers that will occur during the part of the week that is yet to happen.
