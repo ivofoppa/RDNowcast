@@ -18,6 +18,7 @@ using namespace Rcpp;
  //' @param report_date A string variable representing the name of the column with reporting dates.
  //' @param unit String representing time unit of analysis, week ("week") vs. day ("day").
  //' @param nsamples An integer of default 100,000, representing the number of samples from the posterior distributions.
+ //' @param forecast Logical; determines, if the most recent week to be "nowcasted" should be forecasted, if recentRef does not coincide with the end of a week.
  //' @returns A numerical array, each column representing posterior samples of the completeness distribution for a particular nowcast value. The last column represents the most recent number to be nowcasted. 
  //' @example man/examples/NowcastFull_example.R
  //' 
@@ -25,8 +26,8 @@ using namespace Rcpp;
  //' 
  // [[Rcpp::export]]
  IntegerMatrix NowcastFull(DataFrame data, Date dateAnal, Date recentRef, DateVector NCdates, int week_start = 2, int NCsize = 10,  
-                           String reference_date = "reference_date", String report_date = "report_date", 
-                           String unit = "week",int nsamples = 100000) {
+                            String reference_date = "reference_date", String report_date = "report_date", 
+                            String unit = "week",int nsamples = 100000, bool forecast = true) {
    
    DateVector evdates = data[reference_date];
    DateVector rpdates = data[report_date];
@@ -43,14 +44,8 @@ using namespace Rcpp;
    IntegerMatrix obs(NCperiod,NCsize), obs2(NCperiod - 1,NCsize);
    IntegerMatrix full(NCperiod,NCsize), full2(NCperiod - 1,NCsize);
    
-   
-   if (unit=="day") {
-     mult = 1;
-   } else {
-     mult = 7;
-   }
-   
    if(unit=="week") {
+     mult = 7;
      while(weekstrt.getWeekday()!=week_start) {
        weekstrt = Date(weekstrt + -1);
      }
@@ -76,9 +71,16 @@ using namespace Rcpp;
        
        for(int i=0; i<NCsize; i++) {
          
-         if (i==0) {
+         if (i==0 && forecast==true) {
            DateVector repdatessub(evdates[ (evdates>= datesfrom) & (evdates<=datesto1) & (rpdates < dte) ]);
            DateVector evdatessub(evdates[ (evdates>= datesfrom) & (evdates<=datesto2)]);
+           
+           countVec.push_front(evdatessub.length());
+           countVecRep.push_front(repdatessub.length());
+           
+         } else if (i==0 && forecast==false) {
+           DateVector repdatessub(evdates[ (evdates>= datesfrom) & (evdates<=datesto1) & (rpdates < dte) ]);
+           DateVector evdatessub(evdates[ (evdates>= datesfrom) & (evdates<=datesto1)]);
            
            countVec.push_front(evdatessub.length());
            countVecRep.push_front(repdatessub.length());
@@ -99,7 +101,8 @@ using namespace Rcpp;
        full(k, _ ) = countVec;
        ++k;
      }
-   } else {
+   } else if (unit=="day") {
+     mult = 1;
      int k = 0;
      for(DateVector::iterator d = NCdatessrt.begin(); d != NCdatessrt.end(); ++d) {
        
