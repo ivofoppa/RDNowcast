@@ -16,6 +16,7 @@ NowcastProcessed(
   unit = "week",
   nsamples = 1e+05,
   probs = c(0.025, 0.975),
+  forecast = TRUE,
   fd_distance = 20,
   NCperiods = 52,
   cnames = c("median", "lowerCrI", "upperCrI", "observed"),
@@ -43,6 +44,8 @@ The data should be complete in the sense, that reporting delays no longer play a
 \item{nsamples}{An integer of default 100,000, representing the number of samples from the posterior distributions.}
 
 \item{probs}{A numeric vector 0-1, representing the desired quantiles of the nowcast MCMC samples, besides the median.}
+
+\item{forecast}{Logical; determines, if the most recent week to be "nowcasted" should be forecasted, if recentRef does not coincide with the end of a week.}
 
 \item{fd_distance}{Interger, the number of weeks after data are assumed to be complete. Only used if NCdates is not assigned.}
 

@@ -17,6 +17,7 @@
 #' @param unit String representing time unit of analysis, week ("week") vs. day ("day").
 #' @param nsamples An integer of default 100,000, representing the number of samples from the posterior distributions.
 #' @param probs A numeric vector 0-1, representing the desired quantiles of the nowcast MCMC samples, besides the median.  
+#' @param forecast Logical; determines, if the most recent week to be "nowcasted" should be forecasted, if recentRef does not coincide with the end of a week.
 #' @param fd_distance Interger, the number of weeks after data are assumed to be complete. Only used if NCdates is not assigned.
 #' @param NCperiods Integer, the number of data sets used for completeness estimation. Only used if NCdates not assigned. 
 #' @param cnames A character vector with the desired names of the output table; the default values are \code{c(unit,"median","lowerCrI","upperCrI","observed")}, representing
@@ -27,7 +28,7 @@
 #' @export
 NowcastProcessed <- function(data, dateAnal = NULL, recentRef = NULL, NCdates = NULL, NCsize = 10, week_start = 2,
                              reference_date = "reference_date", report_date = "report_date", 
-                             unit = "week",nsamples = 100000, probs = c(0.025,0.975),
+                             unit = "week",nsamples = 100000, probs = c(0.025,0.975), forecast = TRUE,
                              fd_distance = 20, NCperiods = 52, cnames = c("median","lowerCrI","upperCrI","observed"),tu_lab = "week") {
   
   data <- data |> 
@@ -83,7 +84,7 @@ NowcastProcessed <- function(data, dateAnal = NULL, recentRef = NULL, NCdates = 
   
   NC <- NowcastFull(data = data, dateAnal = dateAnal, recentRef = recentRef, week_start = week_start, NCdates = NCdates, NCsize = NCsize,  
                     reference_date = "reference_date", report_date = "report_date", 
-                    unit = unit, nsamples = nsamples) 
+                    unit = unit, nsamples = nsamples, forecast = forecast) 
   
   begweek <- recentRef
   
