@@ -4,14 +4,19 @@ output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{A worked nowcasting example}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}---
+  %\VignetteEncoding{UTF-8}
 ---
 
-```{r, echo = FALSE, message = FALSE}
-knitr::opts_chunk$set(collapse = T, comment = "#>")
-options(tibble.print_min = 4, tibble.print_max = 4)
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
 ```
 
+```{r setup}
+library(RDNowcast)
+```
 ## The data
 
 A data set is included in the `RDNowcast` package:

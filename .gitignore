@@ -8,3 +8,4 @@ src/*.so
 src/*.dll
 RDNowcast.Rproj
 Nowcast_woche.csv
+inst/doc
