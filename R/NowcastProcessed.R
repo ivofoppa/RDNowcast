@@ -1,4 +1,4 @@
-#' Helper function for the function \code{RDNowcast::Nowcast()}
+#' Helper function for the \code{RDNowcast::Nowcast()}
 #' 
 #' @description
 #' This helper function processes the draws from the imputed full numbers (without reporting delay), i.e. the posterior 
