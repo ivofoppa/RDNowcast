@@ -24,12 +24,11 @@ NowcastProcessed(
 )
 }
 \arguments{
-\item{data}{A data frame containing data, with one column representing event times and one with reporting times.
-The data should be complete in the sense, that reporting delays no longer play a role.}
+\item{data}{A data frame containing data, with one column representing event times and one with reporting times. The data should be complete in the sense, that reporting delays no longer play a role.}
 
 \item{dateAnal}{A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.}
 
-\item{recentRef}{A Date object in the format "%YYYY-%mm-%dd" that represents the latest date to be considered in the analyses for events.}
+\item{recentRef}{A Date object in the format "YYYY-mm-dd" that represents the latest date to be considered in the analyses for events.}
 
 \item{NCdates}{A date vector, representing the dates used for the completeness estimation; these dates have to correspond to the same day of week as dateAnal.}
 
