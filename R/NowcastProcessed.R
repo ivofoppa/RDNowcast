@@ -5,10 +5,9 @@
 #' distributions for the full data. 
 #' 
 #' @import dplyr, lubridate
-#' @param data A data frame containing data, with one column representing event times and one with reporting times.
-#'     The data should be complete in the sense, that reporting delays no longer play a role. 
+#' @param data A data frame containing data, with one column representing event times and one with reporting times. The data should be complete in the sense, that reporting delays no longer play a role. 
 #' @param dateAnal A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.
-#' @param recentRef A Date object in the format "%YYYY-%mm-%dd" that represents the latest date to be considered in the analyses for events.
+#' @param recentRef A Date object in the format "YYYY-mm-dd" that represents the latest date to be considered in the analyses for events.
 #' @param NCdates A date vector, representing the dates used for the completeness estimation; these dates have to correspond to the same day of week as dateAnal.
 #' @param NCsize An integer, representing the length of the time series in chosen time units, for which completeness estimates should be obtained.
 #' @param NCperiod The numbers of weeks used for data generation. By default 52 weeks.

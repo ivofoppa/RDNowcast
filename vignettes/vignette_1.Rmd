@@ -17,3 +17,114 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(RDNowcast)
 ```
+## The data
+
+A data set is included in the `RDNowcast` package:
+
+```{r data, message = FALSE}
+library(dplyr)
+library(RDNowcast)
+library(lubridate)
+library(flextable)
+
+data <- RDNowcast::RDdata
+data |> head(n = 10)
+```
+
+This data set, which consists of dates of death (reference_date) and reporting dates (report_date) can be used to generate nowcast estimates and, if the chosen date of analysis is sufficiently far in the past, to validate these estimates.
+
+## Nowcasting the weekly number of deaths
+
+### Preparing the data
+
+We choose a date of analysis of 2026-04-30, which is a Thursday, one year in the past (i.e. before the most recent death date in the data set). We will nowcast 10 weekly counts, with the most recent count to be nowcasted for the week ending past Sunday (2025-08-10). 
+
+Around the date 364 days before the date of analysis, five dates are chosen each into the past and ahead, separated by one week each and on the same day of the week as the date of analysis. The construction of this series of dates is supported by the function `RDNowcast::RDdates_create`.
+
+These dates form the basis for the 11 overlapping 10-week periods, data from which will be used for training:
+
+```{r data_prep, message = FALSE}
+dateAnal <- as.Date("2026-01-22") # The date, the analysis is conducted
+
+ncdates <- NCdates_create(data = data, NCdatesProp = seq.Date(dateAnal - 364 -5*7,dateAnal - 364 +5*7,by = "week"),
+                            dateAnal = dateAnal)
+
+recentRef <- "2026-01-18" # The most recent death date to be considered; does not have to be the end of a week
+
+```
+
+### Running the Nowcast
+
+Once the date of analysis and the training time period have been chosen, the nowcast can be performed
+
+```{r nowcast, message = FALSE}
+# Pulling the complete data, not right-censored
+fullData <- data |>  
+  filter(reference_date<=recentRef) |> 
+  mutate(week = floor_date(reference_date, unit = "week", week_start = 1)) |> 
+  group_by(week) |> summarize(n = n()) |> ungroup() |> 
+  tail(n = 10) |> 
+  pull(n)
+
+NCTable <-  NowcastProcessed(data = data, dateAnal = dateAnal, recentRef = recentRef, NCsize = 10,
+                                          unit = "week",cnames = c("n","ll","ul","o"),tu_lab = "woche",NCdates = ncdates) |> 
+  mutate(complete = fullData)
+
+ft <- flextable(NCTable) |> 
+  set_header_labels(values = c( "Week", "Median",  "Lower 95% Cred. Int.",  "Upper 95% Cred. Int.", "observed", "complete")) |> 
+  flextable::align(align = "center", part = "body") |> flextable::colformat_num(big.mark=",", decimal.mark=".")
+ft
+```
+
+## Counts for the current, yet incomplete week
+
+If the most recent date of death to be considered falls in the same week as the date of analysis, the most recent week to be analyzed is not yet over. We can choose to nowcast the data from the current, incomplete week, by setting the option `forecast = FALSE` :
+
+```{r incomplete_nowcast, message = FALSE}
+# Pulling the complete data, not right-censored
+recentRef2 <- dateAnal - 1
+
+fullData2 <- data |>  
+  filter(reference_date<=recentRef2) |> 
+  mutate(week = floor_date(reference_date, unit = "week", week_start = 1)) |> 
+  group_by(week) |> summarize(n2 = n()) |> ungroup() |> 
+  tail(n = 3 ) |> 
+  pull(n2)
+
+
+NCTable2 <-  NowcastProcessed(data = data, dateAnal = dateAnal, recentRef = recentRef2, NCsize = 3,
+                                          unit = "week",cnames = c("n","ll","ul","o"),tu_lab = "woche",NCdates = ncdates,forecast = FALSE) |> mutate(complete = fullData2)
+
+ft2 <- flextable(NCTable2) |> 
+  set_header_labels(values = c( "Week", "Median",  "Lower 95% Cred. Int.",  "Upper 95% Cred. Int.", "observed", "complete")) |> 
+  flextable::align(align = "center", part = "body") |> flextable::colformat_num(big.mark=",", decimal.mark=".")
+ft2
+```
+
+By setting `forecast = TRUE`, the function makes a non-parametric forecast of the counts for current week, once it will be complete.
+It is a forecast rather thant a nowcast, as there is no information on the numbers that will occur during the part of the week that is yet to happen.
+
+```{r forecast, message = FALSE}
+# Pulling the complete data, not right-censored
+dateTo <- dateAnal
+
+while(wday(dateTo)!=1) {
+  dateTo <- dateTo + 1
+}
+
+fullData3 <- data |>
+  filter(reference_date<=dateTo) |> 
+  mutate(week = floor_date(reference_date, unit = "week", week_start = 1)) |> 
+  group_by(week) |> summarize(n3 = n()) |> ungroup() |> 
+  tail(n = 3 ) |> 
+  pull(n3)
+
+
+NCTable3 <-  NowcastProcessed(data = data, dateAnal = dateAnal, recentRef = recentRef2, NCsize = 3,
+                                          unit = "week",cnames = c("n","ll","ul","o"),tu_lab = "woche",NCdates = ncdates,forecast = TRUE) |> mutate(complete = fullData3)
+
+ft3 <- flextable(NCTable3) |> 
+  set_header_labels(values = c( "Week", "Median",  "Lower 95% Cred. Int.",  "Upper 95% Cred. Int.", "observed", "complete")) |> 
+  flextable::align(align = "center", part = "body") |> flextable::colformat_num(big.mark=",", decimal.mark=".")
+ft3
+```
