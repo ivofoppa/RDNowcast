@@ -10,6 +10,23 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// LawlessNowcastProbs
+NumericMatrix LawlessNowcastProbs(DataFrame data, Date dateAnal, int week_start, int maxdelay, String reference_date, String report_date, int nsamples);
+RcppExport SEXP _RDNowcast_LawlessNowcastProbs(SEXP dataSEXP, SEXP dateAnalSEXP, SEXP week_startSEXP, SEXP maxdelaySEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP nsamplesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< Date >::type dateAnal(dateAnalSEXP);
+    Rcpp::traits::input_parameter< int >::type week_start(week_startSEXP);
+    Rcpp::traits::input_parameter< int >::type maxdelay(maxdelaySEXP);
+    Rcpp::traits::input_parameter< String >::type reference_date(reference_dateSEXP);
+    Rcpp::traits::input_parameter< String >::type report_date(report_dateSEXP);
+    Rcpp::traits::input_parameter< int >::type nsamples(nsamplesSEXP);
+    rcpp_result_gen = Rcpp::wrap(LawlessNowcastProbs(data, dateAnal, week_start, maxdelay, reference_date, report_date, nsamples));
+    return rcpp_result_gen;
+END_RCPP
+}
 // NowcastFull
 IntegerMatrix NowcastFull(DataFrame data, Date dateAnal, Date recentRef, DateVector NCdates, int week_start, int NCsize, String reference_date, String report_date, String unit, int nsamples, bool forecast);
 RcppExport SEXP _RDNowcast_NowcastFull(SEXP dataSEXP, SEXP dateAnalSEXP, SEXP recentRefSEXP, SEXP NCdatesSEXP, SEXP week_startSEXP, SEXP NCsizeSEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP unitSEXP, SEXP nsamplesSEXP, SEXP forecastSEXP) {
@@ -28,23 +45,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nsamples(nsamplesSEXP);
     Rcpp::traits::input_parameter< bool >::type forecast(forecastSEXP);
     rcpp_result_gen = Rcpp::wrap(NowcastFull(data, dateAnal, recentRef, NCdates, week_start, NCsize, reference_date, report_date, unit, nsamples, forecast));
-    return rcpp_result_gen;
-END_RCPP
-}
-// NowcastProbsLawless
-NumericMatrix NowcastProbsLawless(DataFrame data, Date dateAnal, int week_start, int maxdelay, String reference_date, String report_date, int nsamples);
-RcppExport SEXP _RDNowcast_NowcastProbsLawless(SEXP dataSEXP, SEXP dateAnalSEXP, SEXP week_startSEXP, SEXP maxdelaySEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP nsamplesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< Date >::type dateAnal(dateAnalSEXP);
-    Rcpp::traits::input_parameter< int >::type week_start(week_startSEXP);
-    Rcpp::traits::input_parameter< int >::type maxdelay(maxdelaySEXP);
-    Rcpp::traits::input_parameter< String >::type reference_date(reference_dateSEXP);
-    Rcpp::traits::input_parameter< String >::type report_date(report_dateSEXP);
-    Rcpp::traits::input_parameter< int >::type nsamples(nsamplesSEXP);
-    rcpp_result_gen = Rcpp::wrap(NowcastProbsLawless(data, dateAnal, week_start, maxdelay, reference_date, report_date, nsamples));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -95,8 +95,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_RDNowcast_LawlessNowcastProbs", (DL_FUNC) &_RDNowcast_LawlessNowcastProbs, 7},
     {"_RDNowcast_NowcastFull", (DL_FUNC) &_RDNowcast_NowcastFull, 11},
-    {"_RDNowcast_NowcastProbsLawless", (DL_FUNC) &_RDNowcast_NowcastProbsLawless, 7},
     {"_RDNowcast_RDNowcastProbs", (DL_FUNC) &_RDNowcast_RDNowcastProbs, 11},
     {"_RDNowcast_f_N_vec", (DL_FUNC) &_RDNowcast_f_N_vec, 2},
     {"_RDNowcast_f_N_arr", (DL_FUNC) &_RDNowcast_f_N_arr, 2},
