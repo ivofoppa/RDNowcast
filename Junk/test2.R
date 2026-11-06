@@ -1,15 +1,12 @@
 
-# pacman::p_load(dplyr,data.table,ggplot2,tibble,Rcpp,lubridate,stingr)
+# pacman::p_load(dplyr,data.table,ggplot2,tibble,Rcpp,lubridate,stringr)
 
 data <- RDNowcast::RDdata
 
 today1 <- max(data$report_date) + 1 - 364
 
-ncdates <- seq.Date(today1 - 40*7,length.out = 12,by = "week")
-datean <- today1
-# unit <- "day"
-
 unit <- "day"
+unit <- "week"
 NCsize <- 20
 
 if (unit=="week") {
@@ -20,9 +17,14 @@ if (unit=="week") {
   mult <- 1;
 }
 
+ncdates <- seq.Date(today1 - 364 - 5*7,today1 - 364 + 5*7,by = "week")
+datean <- today1
+# unit <- "day"
+
 probs <- c(0.5,.025,.975)
 
-ls <- NowcastProcessed(data, NCdates = ncdates,unit = "day",NCsize = NCsize)
+ls <- RDNowcast(data, dateAnal = datean, NCdates = ncdates,unit = unit,NCsize = NCsize)
+ls2 <- LawlessNowcast(data, maxdelay = 25,dateAnal = datean)
 
 analysedata <- data |> ### die "simulierten" Analysedata (nach gewählter zeitl. Perspektive)
   group_by(reference_date) |>

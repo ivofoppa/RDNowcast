@@ -25,8 +25,8 @@ using namespace Rcpp;
  //' @export
  // [[Rcpp::export]]
  NumericMatrix RDNowcastProbs(DataFrame data, Date dateAnal, Date recentRef, DateVector NCdates, int week_start = 2, int NCsize = 10,  
-                            String reference_date = "reference_date", String report_date = "report_date", 
-                            String unit = "week",int nsamples = 100000, bool forecast = true) {
+                      String reference_date = "reference_date", String report_date = "report_date", 
+                      String unit = "week",int nsamples = 100000, bool forecast = true) {
    
    DateVector evdates = data[reference_date];
    DateVector rpdates = data[report_date];
@@ -38,10 +38,10 @@ using namespace Rcpp;
    Date dte, dtefrom, dteto,weekstrt = recentRef;
    int mult, NCperiod = NCdatessrt.length(),
      offset = dateAnal - recentRef;
-   DateVector NCdatesfrom, NCdatesto1, NCdatesto2;
+   DateVector NCdatesfrom(NCdatessrt.length()), NCdatesto1(NCdatessrt.length()), NCdatesto2(NCdatessrt.length());
    
-   IntegerMatrix obs(NCperiod,NCsize), obs2(NCperiod - 1,NCsize);
-   IntegerMatrix full(NCperiod,NCsize), full2(NCperiod - 1,NCsize);
+   IntegerMatrix obs(NCperiod,NCsize);
+   IntegerMatrix full(NCperiod,NCsize);
    
    if(unit=="week") {
      mult = 7;
@@ -53,10 +53,11 @@ using namespace Rcpp;
      
      //offset2 = Date(NCdatessrt[0]) - Date(weekstrt);
      
+     int j = 0;
      for(DateVector::iterator d = NCdatessrt.begin(); d != NCdatessrt.end(); ++d) {
-       NCdatesfrom.push_back(Date(*d + -offset2)); // start of previous week
-       NCdatesto1.push_back(Date(*d + -offset));
-       NCdatesto2.push_back(Date(*d + -offset2 + mult + -1));
+       NCdatesfrom(j) = Date(*d + -offset2); // start of previous week
+       NCdatesto1(j) = Date(*d + -offset);
+       NCdatesto2(j) = Date(*d + -offset2 + mult + -1);
      }
      
      int k = 0;
@@ -112,8 +113,8 @@ using namespace Rcpp;
          dtefrom = Date(dte + -offset + -i);
          dteto = Date(dte + -offset + -i);
          
-         DateVector repdatessub(evdates[ (evdates>=dtefrom) & (evdates<=dteto) & (rpdates < dte) ]);
-         DateVector evdatessub(evdates[ (evdates>=dtefrom) & (evdates<=dteto)]);
+         DateVector repdatessub(evdates[ (evdates==dtefrom) & (rpdates < dte) ]);
+         DateVector evdatessub(evdates[ (evdates==dtefrom)]);
          
          countVec.push_front(evdatessub.length());
          countVecRep.push_front(repdatessub.length());
@@ -126,26 +127,34 @@ using namespace Rcpp;
    
    IntegerVector obsVec = obs(0, _ );
    
-   for (int k=1; k<NCperiod; k++) {
-     obs2(k-1, _ ) = IntegerVector(obs(k, _ ));
-     full2(k-1, _ ) = IntegerVector(full(k, _ ));
-   }
-   
-   int nrows = obs2.nrow(), ncols = obs2.ncol();
+   int nrows = obs.nrow(), ncols = obs.ncol();
    NumericVector pvec(nsamples*nrows);
-   NumericMatrix pmat(nsamples*nrows,ncols);
+   NumericMatrix pmat(nsamples*nrows,ncols), pmatsmpl(nsamples,ncols);
    
    for(int i=0; i<ncols; i++) {
      for(int k=0; k<nrows; k++) {
-       alpha = obs2(k,i) + 1;
-       beta = full2(k,i) - obs2(k,i) + 1;
+       alpha = obs(k,i) + 1;
+       beta = full(k,i) - obs(k,i) + 1;
        for(int l=0; l<nsamples; l++) {
          pvec[k*nsamples + l] = R::rbeta(alpha,beta);
        } 
      }
      pmat(_,i) = pvec;
    }
-   return pmat;
+   
+   IntegerVector full_index(pmat.nrow());
+   
+   for(int m=0; m<full_index.length(); m++){
+     full_index(m) = m;
+   }
+   
+   IntegerVector smple = sample(full_index,nsamples);
+   
+   for(int n=0; n<nsamples; n++) {
+     pmatsmpl(n, _ ) = pmat(smple(n), _ );
+   }
+   
+   return pmatsmpl;
  }
  
  
