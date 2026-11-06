@@ -22,6 +22,13 @@ RDNowcastProbs <- function(data, dateAnal, recentRef, NCdates, week_start = 2L, 
     .Call(`_RDNowcast_RDNowcastProbs`, data, dateAnal, recentRef, NCdates, week_start, NCsize, reference_date, report_date, unit, nsamples, forecast)
 }
 
+#' Generates posterior probabilities for Nowcasting, based on Lawless, 1994.
+NULL
+
+Test1 <- function(data, dateAnal, recentRef, week_start = 2L, unit = "week", maxdelay = 25L, reference_date = "reference_date", report_date = "report_date", nsamples = 100000L) {
+    .Call(`_RDNowcast_Test1`, data, dateAnal, recentRef, week_start, unit, maxdelay, reference_date, report_date, nsamples)
+}
+
 #' Generates a vector of filled-in numbers 
 #' 
 #' \code{f_N_vec} returns a vector of random numbers from the distribution of the total number \code{N}, given the number of successes \code{x}
