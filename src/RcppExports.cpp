@@ -49,8 +49,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // RDNowcastProbs
-NumericMatrix RDNowcastProbs(DataFrame data, Date dateAnal, Date recentRef, DateVector NCdates, int week_start, int NCsize, String reference_date, String report_date, String unit, int nsamples, bool forecast);
-RcppExport SEXP _RDNowcast_RDNowcastProbs(SEXP dataSEXP, SEXP dateAnalSEXP, SEXP recentRefSEXP, SEXP NCdatesSEXP, SEXP week_startSEXP, SEXP NCsizeSEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP unitSEXP, SEXP nsamplesSEXP, SEXP forecastSEXP) {
+NumericMatrix RDNowcastProbs(DataFrame data, Date dateAnal, Date recentRef, DateVector NCdates, int week_start, int NCsize, String reference_date, String report_date, String unit, int nsamples);
+RcppExport SEXP _RDNowcast_RDNowcastProbs(SEXP dataSEXP, SEXP dateAnalSEXP, SEXP recentRefSEXP, SEXP NCdatesSEXP, SEXP week_startSEXP, SEXP NCsizeSEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP unitSEXP, SEXP nsamplesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -64,8 +64,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< String >::type report_date(report_dateSEXP);
     Rcpp::traits::input_parameter< String >::type unit(unitSEXP);
     Rcpp::traits::input_parameter< int >::type nsamples(nsamplesSEXP);
-    Rcpp::traits::input_parameter< bool >::type forecast(forecastSEXP);
-    rcpp_result_gen = Rcpp::wrap(RDNowcastProbs(data, dateAnal, recentRef, NCdates, week_start, NCsize, reference_date, report_date, unit, nsamples, forecast));
+    rcpp_result_gen = Rcpp::wrap(RDNowcastProbs(data, dateAnal, recentRef, NCdates, week_start, NCsize, reference_date, report_date, unit, nsamples));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -97,7 +96,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_RDNowcast_LawlessNowcastProbs", (DL_FUNC) &_RDNowcast_LawlessNowcastProbs, 7},
     {"_RDNowcast_NowcastFull", (DL_FUNC) &_RDNowcast_NowcastFull, 11},
-    {"_RDNowcast_RDNowcastProbs", (DL_FUNC) &_RDNowcast_RDNowcastProbs, 11},
+    {"_RDNowcast_RDNowcastProbs", (DL_FUNC) &_RDNowcast_RDNowcastProbs, 10},
     {"_RDNowcast_f_N_vec", (DL_FUNC) &_RDNowcast_f_N_vec, 2},
     {"_RDNowcast_f_N_arr", (DL_FUNC) &_RDNowcast_f_N_arr, 2},
     {NULL, NULL, 0}

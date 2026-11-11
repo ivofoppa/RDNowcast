@@ -18,134 +18,94 @@ using namespace Rcpp;
  //' @param report_date A string variable representing the name of the column with reporting dates.
  //' @param unit String representing time unit of analysis, week ("week") vs. day ("day").
  //' @param nsamples An integer of default 100,000, representing the number of samples from the posterior distributions.
- //' @param forecast Logical; determines, if the most recent week to be "nowcasted" should be forecasted, if recentRef does not coincide with the end of a week.
  //' @returns A numerical array, each column representing posterior samples of the completeness distribution for a particular nowcast value. The last column represents the most recent number to be nowcasted. 
  //' @example man/examples/RDNowcastProbs_example.R
  //' 
  //' @export
  // [[Rcpp::export]]
  NumericMatrix RDNowcastProbs(DataFrame data, Date dateAnal, Date recentRef, DateVector NCdates, int week_start = 2, int NCsize = 10,  
-                            String reference_date = "reference_date", String report_date = "report_date", 
-                            String unit = "week",int nsamples = 100000, bool forecast = true) {
+                     String reference_date = "reference_date", String report_date = "report_date", 
+                     String unit = "week",int nsamples = 100000) {
    
    DateVector evdates = data[reference_date];
    DateVector rpdates = data[report_date];
    DateVector NCdatessrt = rev(sort_unique(NCdates));
-   NCdatessrt.push_front(dateAnal);
+   
+   if ((recentRef.getWeekday()!= (week_start + -1)) & (unit=="week") )
+     Rcpp::stop("recentRef fall on the end of the week (if unit==\"week\")!");
    
    double alpha;
    double beta;
-   Date dte, dtefrom, dteto,weekstrt = recentRef;
-   int mult, NCperiod = NCdatessrt.length(),
-     offset = dateAnal - recentRef;
-   DateVector NCdatesfrom, NCdatesto1, NCdatesto2;
+   Date dte, dtefrom, dteto;
+   int mult, NCperiod = NCdatessrt.length();
+   DateVector datesfrom(NCperiod), datesto(NCperiod);
    
-   IntegerMatrix obs(NCperiod,NCsize), obs2(NCperiod - 1,NCsize);
-   IntegerMatrix full(NCperiod,NCsize), full2(NCperiod - 1,NCsize);
+   IntegerMatrix obs(NCperiod,NCsize), full(NCperiod,NCsize);
+   
+   int offset = dateAnal - recentRef;
    
    if(unit=="week") {
      mult = 7;
-     while(weekstrt.getWeekday()!=week_start) {
-       weekstrt = Date(weekstrt + -1);
-     }
-     
-     int offset2 = dateAnal - weekstrt;
-     
-     //offset2 = Date(NCdatessrt[0]) - Date(weekstrt);
-     
-     for(DateVector::iterator d = NCdatessrt.begin(); d != NCdatessrt.end(); ++d) {
-       NCdatesfrom.push_back(Date(*d + -offset2)); // start of previous week
-       NCdatesto1.push_back(Date(*d + -offset));
-       NCdatesto2.push_back(Date(*d + -offset2 + mult + -1));
-     }
-     
-     int k = 0;
-     for(DateVector::iterator d = NCdatessrt.begin(); d != NCdatessrt.end(); ++d) {
-       
-       IntegerVector countVec, countVecRep;
-       dte = Date(*d);
-       Date datesfrom = NCdatesfrom[k];
-       Date datesto1 = NCdatesto1[k];
-       Date datesto2 = NCdatesto2[k];
-       
-       for(int i=0; i<NCsize; i++) {
-         
-         if (i==0 && forecast==true) {
-           DateVector repdatessub(evdates[ (evdates>= datesfrom) & (evdates<=datesto1) & (rpdates < dte) ]);
-           DateVector evdatessub(evdates[ (evdates>= datesfrom) & (evdates<=datesto2)]);
-           
-           countVec.push_front(evdatessub.length());
-           countVecRep.push_front(repdatessub.length());
-           
-         } else if (i==0 && forecast==false) {
-           DateVector repdatessub(evdates[ (evdates>= datesfrom) & (evdates<=datesto1) & (rpdates < dte) ]);
-           DateVector evdatessub(evdates[ (evdates>= datesfrom) & (evdates<=datesto1)]);
-           
-           countVec.push_front(evdatessub.length());
-           countVecRep.push_front(repdatessub.length());
-           
-         } else {
-           dtefrom = Date(datesfrom + -(i*mult));
-           dteto = Date(datesto2 + -(i*mult));
-           
-           DateVector repdatessub(evdates[ (evdates>=dtefrom) & (evdates<=dteto) & (rpdates < dte) ]);
-           DateVector evdatessub(evdates[ (evdates>=dtefrom) & (evdates<=dteto)]);
-           
-           countVec.push_front(evdatessub.length());
-           countVecRep.push_front(repdatessub.length());
-         }
-       }
-       
-       obs(k, _ ) = countVecRep;
-       full(k, _ ) = countVec;
-       ++k;
-     }
-   } else if (unit=="day") {
+   } else {
      mult = 1;
-     int k = 0;
-     for(DateVector::iterator d = NCdatessrt.begin(); d != NCdatessrt.end(); ++d) {
+   }
+   
+   int i = 0;
+   for(DateVector::iterator d = NCdatessrt.begin(); d != NCdatessrt.end(); ++d) {
+     datesfrom(i) = Date(*d + -offset + -mult + 1); // start of previous week
+     datesto(i) = Date(*d + -offset);
+     
+     dte = Date(*d);
+     
+     Date dtefrom, dteto;
+     IntegerVector countVec(NCsize), countVecRep(NCsize);
+     
+     for(int k=0; k<NCsize; k++) {
        
-       IntegerVector countVec, countVecRep;
-       dte = Date(*d);
+       dtefrom = datesfrom(i) + -mult*k;
+       dteto = datesto(i) + -mult*k;
        
-       for(int i=0; i<NCsize; i++) {
-         dtefrom = Date(dte + -offset + -i);
-         dteto = Date(dte + -offset + -i);
-         
-         DateVector repdatessub(evdates[ (evdates>=dtefrom) & (evdates<=dteto) & (rpdates < dte) ]);
-         DateVector evdatessub(evdates[ (evdates>=dtefrom) & (evdates<=dteto)]);
-         
-         countVec.push_front(evdatessub.length());
-         countVecRep.push_front(repdatessub.length());
-       }
-       obs(k, _ ) = countVecRep;
-       full(k, _ ) = countVec;
-       ++k;
+       DateVector repdatessub(evdates[ (evdates >= dtefrom) & (evdates <= dteto) & (rpdates < dte) ]);
+       DateVector evdatessub(evdates[ (evdates >= dtefrom) & (evdates <= dteto)]);
+       
+       countVec(k) = evdatessub.length();
+       countVecRep(k) = repdatessub.length();
+       
      }
+     
+     obs(i, _ ) = rev(countVecRep);
+     full(i, _ ) = rev(countVec);
+     i++;
    }
    
-   IntegerVector obsVec = obs(0, _ );
-   
-   for (int k=1; k<NCperiod; k++) {
-     obs2(k-1, _ ) = IntegerVector(obs(k, _ ));
-     full2(k-1, _ ) = IntegerVector(full(k, _ ));
-   }
-   
-   int nrows = obs2.nrow(), ncols = obs2.ncol();
+   int nrows = obs.nrow(), ncols = obs.ncol();
    NumericVector pvec(nsamples*nrows);
-   NumericMatrix pmat(nsamples*nrows,ncols);
+   NumericMatrix pmat(nsamples*nrows,ncols), pmatsmpl(nsamples,ncols);
    
    for(int i=0; i<ncols; i++) {
      for(int k=0; k<nrows; k++) {
-       alpha = obs2(k,i) + 1;
-       beta = full2(k,i) - obs2(k,i) + 1;
+       alpha = obs(k,i) + 1;
+       beta = full(k,i) - obs(k,i) + 1;
        for(int l=0; l<nsamples; l++) {
          pvec[k*nsamples + l] = R::rbeta(alpha,beta);
        } 
      }
      pmat(_,i) = pvec;
    }
-   return pmat;
+   
+   IntegerVector full_index(pmat.nrow());
+   
+   for(int m=0; m<full_index.length(); m++){
+     full_index(m) = m;
+   }
+   
+   IntegerVector smple = sample(full_index,nsamples);
+   
+   for(int n=0; n<nsamples; n++) {
+     pmatsmpl(n, _ ) = pmat(smple(n), _ );
+   }
+   
+   return pmatsmpl;
  }
  
  
