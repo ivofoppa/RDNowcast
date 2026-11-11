@@ -1,6 +1,8 @@
 
 # pacman::p_load(dplyr,data.table,ggplot2,tibble,Rcpp,lubridate,stingr)
 
+library(RDNowcast)
+
 data <- RDNowcast::RDdata
 
 today1 <- max(data$report_date) + 1 - 364

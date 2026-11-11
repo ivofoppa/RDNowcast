@@ -18,8 +18,8 @@ NowcastFull <- function(data, dateAnal, recentRef, NCdates, week_start = 2L, NCs
 #' Generates data for posterior probabilities for Nowcasting
 NULL
 
-RDNowcastProbs <- function(data, dateAnal, recentRef, NCdates, week_start = 2L, NCsize = 10L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L, forecast = TRUE) {
-    .Call(`_RDNowcast_RDNowcastProbs`, data, dateAnal, recentRef, NCdates, week_start, NCsize, reference_date, report_date, unit, nsamples, forecast)
+RDNowcastProbs <- function(data, dateAnal, recentRef, NCdates, week_start = 2L, NCsize = 10L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
+    .Call(`_RDNowcast_RDNowcastProbs`, data, dateAnal, recentRef, NCdates, week_start, NCsize, reference_date, report_date, unit, nsamples)
 }
 
 #' Generates a vector of filled-in numbers 
