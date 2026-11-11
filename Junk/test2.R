@@ -3,7 +3,7 @@
 
 library(RDNowcast)
 
-data <- RDNowcast::RDdata
+data <- read.csv("~/Projects/GitHub/RDNowcast/data/RDdata.csv")
 
 today1 <- max(data$report_date) + 1 - 364
 
