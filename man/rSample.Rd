@@ -15,9 +15,7 @@ rSample(x, nsamples = 10000)
 A numeric vector of length \code{nsamples * length(x)}.
 }
 \description{
-This function draws samples from distribution of the Poisson parameter \code{\eqn{\lambda}}, given \code{x} events. 
-    It makes use of the fact, that the distribution is a Gamma distribution with parameters \code{\eqn{\alpha = x +1}} and
-    \code{\eqn{\beta = 1}}.
+This function draws samples from distribution of the Poisson parameter \code{\eqn{\lambda}}, given `x` events. It makes use of the fact, that the distribution is a Gamma distribution with parameters \eqn{\alpha = x +1} and \eqn{\beta = 1}.
 }
 \examples{
 lambdavec <- rSample(c(100,120))

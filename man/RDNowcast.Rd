@@ -57,8 +57,7 @@ RDNowcast(
 A table with quantiles of the MCMC samples per date.
 }
 \description{
-This helper function processes the draws from the imputed full numbers (without reporting delay), i.e. the posterior 
-distributions for the full data.
+This helper function processes the draws from the imputed full numbers (without reporting delay), i.e. the posterior distributions for the full data.
 }
 \examples{
 library(RDNowcast)

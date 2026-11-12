@@ -34,8 +34,7 @@ LawlessNowcast(
 A table with quantiles of the MCMC samples per date.
 }
 \description{
-This helper function generates full numbers (without reporting delay), i.e. the posterior 
-distributions for the full data and organizes the results in a table.
+This helper function generates full numbers (without reporting delay), i.e. the posterior distributions for the full data and organizes the results in a table.
 }
 \examples{
 library(RDNowcast)

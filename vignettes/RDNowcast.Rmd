@@ -2,7 +2,7 @@
 title: "Nowcasting weekly numbers of deaths"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Nowcasting}
+  %\VignetteIndexEntry{RDNowcast}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -12,10 +12,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-```
-
-```{r setup}
-library(RDNowcast)
 ```
 ## The data
 
@@ -49,7 +45,7 @@ dateAnal <- as.Date("2026-07-09") # The date, the analysis is conducted
 ncdates <- NCdates_create(data = data, NCdatesProp = seq.Date(dateAnal - 364 -5*7,dateAnal - 364 +5*7,by = "week"),
                             dateAnal = dateAnal)
 
-recentRef <- "2026-07-05" # The most recent death date to be considered; does not have to be the end of a week
+recentRef <- "2026-07-05" # The most recent death date to be considered; has to be last day of week if weekly-aggregated data is used
 
 ```
 
