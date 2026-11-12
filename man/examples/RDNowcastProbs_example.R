@@ -1,4 +1,6 @@
-library(RDNowcast,dplyr,lubridate)
+library(RDNowcast)
+library(dplyr)
+library(lubridate)
 
 NCdata <- RDNowcast::RDdata  ### Loading the data set from the package
 

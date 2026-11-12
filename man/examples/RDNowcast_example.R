@@ -9,4 +9,4 @@ ncdates <- NCdates_create(data = NCdata, NCdatesProp = seq.Date(dateAnal - 364 -
 NC <- RDNowcast(data = NCdata,dateAnal = dateAnal,recentRef = dateAnal-4, NCsize = 10,unit = "week",cnames = c("sm","sll","sul","o"),
                                        NCdates = ncdates)
 
-NCproc
+NC

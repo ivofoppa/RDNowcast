@@ -2,7 +2,7 @@
 % Please edit documentation in R/LawlessNowcast.R
 \name{LawlessNowcast}
 \alias{LawlessNowcast}
-\title{Helper function for the function `NowcastProbsLawless()`}
+\title{Helper function for the function `LawlessNowcastProbs()`}
 \usage{
 LawlessNowcast(
   data,
@@ -18,8 +18,7 @@ LawlessNowcast(
 )
 }
 \arguments{
-\item{data}{A data frame containing data, with one column representing event times and one with reporting times.
-The data should be complete in the sense, that reporting delays no longer play a role.}
+\item{data}{A data frame containing data, with one column representing event times and one with reporting times. The data should be complete in the sense, that reporting delays no longer play a role.}
 
 \item{dateAnal}{A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.}
 

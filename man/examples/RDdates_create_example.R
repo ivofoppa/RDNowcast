@@ -1,3 +1,5 @@
+library(RDNowcast)
+
 data <- RDNowcast::RDdata
 
 NCdates_create(data = data,dateAnal="2025-05-15")
