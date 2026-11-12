@@ -1,12 +1,9 @@
-#' Helper function for the function `NowcastProbsLawless()`
-#' 
+#' Helper function for the function `LawlessNowcastProbs()`
 #' @description
 #' This helper function generates full numbers (without reporting delay), i.e. the posterior 
 #' distributions for the full data and organizes the results in a table. 
-#' 
 #' @import dplyr, lubridate
-#' @param data A data frame containing data, with one column representing event times and one with reporting times.
-#'     The data should be complete in the sense, that reporting delays no longer play a role. 
+#' @param data A data frame containing data, with one column representing event times and one with reporting times. The data should be complete in the sense, that reporting delays no longer play a role. 
 #' @param dateAnal A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.
 #' @param week_start An integer, denoting start of the week (1: Sunday); default value is 2 (Monday).
 #' @param reference_date A string variable representing the name of the column with event dates.

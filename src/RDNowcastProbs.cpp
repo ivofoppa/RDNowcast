@@ -3,26 +3,25 @@
 using namespace Rcpp;
 //[Rcpp::interfaces(cpp)]
 //' Generates data for posterior probabilities for Nowcasting
- //'  
- //' @description
- //' This function generates posterior completeness probabilities that can be used to generate Nowcast estimates.
- //' 
- //' @param data A data frame containing data, with one column representing event times and one with reporting times.
- //'     The data should be complete in the sense, that reporting delays no longer play a role. 
- //' @param dateAnal A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.
- //' @param recentRef A Date object in the format "%YYYY-%mm-%dd" that represents the latest date to be considered in the analyses for events.
- //' @param NCdates A date vector of the historical dates of the same day of week as the date of analysis, for which the data can be assumed to be complete. 
- //' @param week_start An integer, denoting start of the week (1: Sunday); default value is 2 (Monday).
- //' @param NCsize An integer, representing the length of the time series in chosen time units, for which completeness estimates should be obtained.
- //' @param reference_date A string variable representing the name of the column with event dates.
- //' @param report_date A string variable representing the name of the column with reporting dates.
- //' @param unit String representing time unit of analysis, week ("week") vs. day ("day").
- //' @param nsamples An integer of default 100,000, representing the number of samples from the posterior distributions.
- //' @returns A numerical array, each column representing posterior samples of the completeness distribution for a particular nowcast value. The last column represents the most recent number to be nowcasted. 
- //' @example man/examples/RDNowcastProbs_example.R
- //' 
- //' @export
- // [[Rcpp::export]]
+//'  
+//' @description
+//' This function generates posterior completeness probabilities that can be used to generate Nowcast estimates.
+//' 
+//' @param data A data frame containing data, with one column representing event times and one with reporting times.
+//'     The data should be complete in the sense, that reporting delays no longer play a role. 
+//' @param dateAnal A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.
+//' @param recentRef A Date object in the format "%YYYY-%mm-%dd" that represents the latest date to be considered in the analyses for events.
+//' @param NCdates A date vector of the historical dates of the same day of week as the date of analysis, for which the data can be assumed to be complete. 
+//' @param week_start An integer, denoting start of the week (1: Sunday); default value is 2 (Monday).
+//' @param NCsize An integer, representing the length of the time series in chosen time units, for which completeness estimates should be obtained.
+//' @param reference_date A string variable representing the name of the column with event dates.
+//' @param report_date A string variable representing the name of the column with reporting dates.
+//' @param unit String representing time unit of analysis, week ("week") vs. day ("day").
+//' @param nsamples An integer of default 100,000, representing the number of samples from the posterior distributions.
+//' @returns A numerical array, each column representing posterior samples of the completeness distribution for a particular nowcast value. The last column represents the most recent number to be nowcasted. 
+//' @example man/examples/RDNowcastProbs_example.R
+//' @export
+// [[Rcpp::export]]
  NumericMatrix RDNowcastProbs(DataFrame data, Date dateAnal, Date recentRef, DateVector NCdates, int week_start = 2, int NCsize = 10,  
                      String reference_date = "reference_date", String report_date = "report_date", 
                      String unit = "week",int nsamples = 100000) {
@@ -52,7 +51,7 @@ using namespace Rcpp;
    
    int i = 0;
    for(DateVector::iterator d = NCdatessrt.begin(); d != NCdatessrt.end(); ++d) {
-     datesfrom(i) = Date(*d + -offset + -mult + 1); // start of previous week
+     datesfrom(i) = Date(*d + -offset + -mult + 1);// start of previous week
      datesto(i) = Date(*d + -offset);
      
      dte = Date(*d);

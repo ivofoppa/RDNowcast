@@ -7,9 +7,9 @@
 f_N_arr(xvec, pmat)
 }
 \arguments{
-\item{pmat}{Array, with same number of columns as \code{x} has elements, of probabilities (data completeness)}
+\item{xvec}{Vector of observed number}
 
-\item{x}{Vector of observed number}
+\item{pmat}{Array, with same number of columns as \code{x} has elements, of probabilities (data completeness)}
 }
 \value{
 Array of same dimensions as \code{pmat} of full numbers given the observed numbers \code{x} and the probabilities in \code{pmat}.
@@ -18,5 +18,25 @@ Array of same dimensions as \code{pmat} of full numbers given the observed numbe
 Generates an array of filled-in numbers
 }
 \examples{
-/man/examples/f_N_arr.R
+library(RDNowcast)
+library(dplyr)
+library(lubridate)
+
+NCdata <- RDNowcast::RDdata  ### Loading the data set from the package
+
+dateAnal <- as.Date( "2026-07-09")
+recentRef <- dateAnal - 4
+
+ncdates <- NCdates_create(data = NCdata, NCdatesProp = seq.Date(dateAnal - 364 -5*7,dateAnal - 364 +5*7,by = "week"),dateAnal = dateAnal)
+
+NCprobs <- RDNowcastProbs(data = NCdata,dateAnal = dateAnal,recentRef = recentRef, NCsize = 10,unit = "week",
+                NCdates = ncdates)
+
+nobs <- NCdata |> 
+  filter(reference_date <= recentRef,report_date < dateAnal) |> 
+  mutate(week = floor_date(reference_date,unit = "week",week_start = 1)) |> 
+  summarize(.by = "week",n = n()) |> 
+  tail(n = 10) |> pull(n)
+
+NC <- f_N_arr(xvec = nobs, pmat = NCprobs) ### Generating samples from posteriors
 }

@@ -16,7 +16,6 @@ RDNowcast(
   unit = "week",
   nsamples = 1e+05,
   probs = c(0.025, 0.975),
-  forecast = TRUE,
   fd_distance = 20,
   NCperiods = 52,
   cnames = c("median", "lowerCrI", "upperCrI", "observed"),
@@ -44,14 +43,11 @@ RDNowcast(
 
 \item{probs}{A numeric vector 0-1, representing the desired quantiles of the nowcast MCMC samples, besides the median.}
 
-\item{forecast}{Logical; determines, if the most recent week to be "nowcasted" should be forecasted, if recentRef does not coincide with the end of a week.}
-
 \item{fd_distance}{Interger, the number of weeks after data are assumed to be complete. Only used if NCdates is not assigned.}
 
 \item{NCperiods}{Integer, the number of data sets used for completeness estimation. Only used if NCdates not assigned.}
 
-\item{cnames}{A character vector with the desired names of the output table; the default values are \code{c(unit,"median","lowerCrI","upperCrI","observed")}, representing
-time (in chosen time units), the median of the MCMC samples, the lower credible interval (level chosen in the argument \code{probs}), the upper credible interval and the observed counts.}
+\item{cnames}{A character vector with the desired names of the output table; the default values are \code{c(unit,"median","lowerCrI","upperCrI","observed")}, representing time (in chosen time units), the median of the MCMC samples, the lower credible interval (level chosen in the argument `probs`), the upper credible interval and the observed counts.}
 
 \item{tu_lab}{Desired label of time units in table.}
 
@@ -76,5 +72,5 @@ ncdates <- NCdates_create(data = NCdata, NCdatesProp = seq.Date(dateAnal - 364 -
 NC <- RDNowcast(data = NCdata,dateAnal = dateAnal,recentRef = dateAnal-4, NCsize = 10,unit = "week",cnames = c("sm","sll","sul","o"),
                                        NCdates = ncdates)
 
-NCproc
+NC
 }

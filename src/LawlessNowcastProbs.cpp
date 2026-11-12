@@ -3,22 +3,19 @@
 using namespace Rcpp;
 //[Rcpp::interfaces(cpp)]
 //' Generates posterior probabilities for Nowcasting, based on Lawless, 1994.
- //'  
- //' @description
- //' This function generates posterior completeness probabilities for Nowcasting full numbers, based on the approach of Lawless, 1994.
- //' 
- //' @param data A data frame containing data, with one column representing event times and one with reporting times.
- //'     The data should be complete in the sense, that reporting delays no longer play a role. 
- //' @param dateAnal A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.
- //' @param week_start An integer, denoting start of the week (1: Sunday); default value is 2 (Monday).
- //' @param reference_date A string variable representing the name of the column with event dates.
- //' @param report_date A string variable representing the name of the column with reporting dates.
- //' @param nsamples An integer of default 100,000, representing the number of samples from the posterior distributions.
- //' @returns A numerical array, each column representing posterior samples of the completeness distribution for a particular nowcast value. The last column represents the most recent number to be nowcasted. 
- //' @example man/examples/NowcastProbsLawless_example.R
- //' 
- //' @export
- // [[Rcpp::export]]
+//' @description
+//' This function generates posterior completeness probabilities for Nowcasting full numbers, based on the approach of Lawless, 1994.
+//' @param data A data frame containing data, with one column representing event times and one with reporting times. The data should be complete in the sense, that reporting delays no longer play a role. 
+//' @param dateAnal A date, represented in the format "YYYY-mm-dd" that sets the date of analysis; if missing, the most recent report_date + 1 is chosen.
+//' @param week_start An integer, denoting start of the week (1: Sunday); default value is 2 (Monday).
+//' @param maxdelay An integer, expressing the maximum lags to be considered (in weeks).
+//' @param reference_date A string variable representing the name of the column with event dates.
+//' @param report_date A string variable representing the name of the column with reporting dates.
+//' @param nsamples An integer of default 100,000, representing the number of samples from the posterior distributions.
+//' @returns A numerical array, each column representing posterior samples of the completeness distribution for a particular nowcast value. The last column represents the most recent number to be nowcasted. 
+//' @example man/examples/LawlessNowcastProbs_example.R
+//' @export
+// [[Rcpp::export]]
  NumericMatrix LawlessNowcastProbs(DataFrame data, Date dateAnal, int week_start = 2, 
                       int maxdelay = 25,
                       String reference_date = "reference_date", String report_date = "report_date",int nsamples = 100000) {
@@ -39,12 +36,12 @@ using namespace Rcpp;
    DateVector evdates(evdates0[(evdates0 >= weekstrt + -tau*7) & (evdates0 < weekstrt) & (rpdates0 < weekstrt)]);;
    DateVector rpdates(rpdates0[(evdates0 >= weekstrt + -tau*7) & (evdates0 < weekstrt) & (rpdates0 < weekstrt)]);;
    
-   // double alpha, beta;
+  // double alpha, beta;
    
    DateVector week_ref(evdates.length()), week_rep(rpdates.length());
    IntegerVector lag(evdates.length());
    
-   // Date week;
+  // Date week;
    for (int k=0; k < week_ref.length(); k++) {
      Date week1 = evdates[k];
      while (week1.getWeekday()!=week_start) {

@@ -18,6 +18,3 @@ Vector of same length as `pvec` of draws from the distribution of full numbers g
 \code{f_N_vec} returns a vector of random numbers from the distribution of the total number \code{N}, given the number of successes \code{x}
      and a vector of success probabilities, \code{p}.
 }
-\examples{
-/man/examples/f_N_vec.R
-}

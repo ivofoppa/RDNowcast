@@ -8,9 +8,7 @@ using namespace Rcpp;
 //' @param x Observed number 
 //' @param pvec Vector of probabilities (data completeness)
 //' @return Vector of same length as `pvec` of draws from the distribution of full numbers given the observed number \code{x} and the probabilities in `p`. 
-//' @examples /man/examples/f_N_vec.R
 //' @export
-//' 
 // [[Rcpp::export]]
 IntegerVector f_N_vec(int x, NumericVector pvec) {
   
@@ -34,15 +32,13 @@ IntegerVector f_N_vec(int x, NumericVector pvec) {
   return out;
 }
 //[Rcpp::interfaces(cpp)]
-
 //' Generates an array of filled-in numbers 
 //' 
-//' @param x Vector of observed number 
+//' @param xvec Vector of observed number 
 //' @param pmat Array, with same number of columns as \code{x} has elements, of probabilities (data completeness)
 //' @return Array of same dimensions as \code{pmat} of full numbers given the observed numbers \code{x} and the probabilities in \code{pmat}. 
-//' @examples /man/examples/f_N_arr.R
+//' @example /man/examples/f_N_arr_example.R
 //' @export
-//' 
 // [[Rcpp::export]]
 IntegerMatrix f_N_arr(IntegerVector xvec, NumericMatrix pmat) {
   
