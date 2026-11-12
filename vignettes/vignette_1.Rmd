@@ -1,8 +1,8 @@
 ---
-title: "vignette_1"
+title: "Nowcasting weekly numbers of deaths"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{vignette_1}
+  %\VignetteIndexEntry{Nowcasting}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

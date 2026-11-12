@@ -34,3 +34,14 @@ ls2 <- LawlessNowcast(data = data,maxdelay = 25,dateAnal = dateAnal)
 ls |> left_join(ntrue,by = "week")
 
 ls2 |> left_join(ntrue,by = "week")
+
+ntrued <- data |> 
+  summarize(.by = "reference_date",ntrue = n()) 
+
+ncdates <- NCdates_create(data = data, NCdatesProp = seq.Date(dateAnal - 364 -5*7,dateAnal - 364 +5*7,by = "week"),
+                          dateAnal = dateAnal)
+
+ls3 <- RDNowcast(data = data,unit = "day",dateAnal = dateAnal,recentRef = dateAnal - 1,NCdates = ncdates,NCsize = 45,tu_lab = "reference_date")
+
+ls3 |> left_join(ntrued,by = "reference_date")
+

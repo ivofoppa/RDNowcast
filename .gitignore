@@ -10,4 +10,4 @@ RDNowcast.Rproj
 Nowcast_woche.csv
 inst/doc
 Archiv
-Junk
+Junk/*.*
