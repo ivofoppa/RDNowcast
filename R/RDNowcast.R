@@ -97,7 +97,7 @@ RDNowcast <- function(data, dateAnal = NULL, recentRef = NULL, NCdates = NULL, N
       mutate(week = floor_date(reference_date,unit = "week",week_start = week_start - 1)) |> 
       group_by(week) |> 
       summarize(n = n()) |> ungroup() |>
-      slice_tail(n = NCsize) |> pull(n) |> unlist() |> as.vector()
+      slice_tail(n = NCsize) |> pull(n)
     
     NC <- f_N_arr(xvec = n_obs,pmat = NCprobs)
   } else {
@@ -109,7 +109,7 @@ RDNowcast <- function(data, dateAnal = NULL, recentRef = NULL, NCdates = NULL, N
              report_date < dateAnal) |> 
       group_by(reference_date) |> 
       summarize(n = n()) |> ungroup() |>
-      slice_tail(n = NCsize) |> pull(n) |> unlist() |> as.vector()
+      slice_tail(n = NCsize) |> pull(n) 
 
     NC <- f_N_arr(xvec = n_obs,pmat = NCprobs)
   }
