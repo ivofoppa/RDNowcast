@@ -71,19 +71,16 @@ using namespace Rcpp;
    for(DateVector::iterator w = weeks.begin(); w != weeks.end(); w++) {
      Date week = *w;
      
-     IntegerVector Ntvec(week_ref.length()), ntvec(week_ref.length());
+     IntegerVector Ntvec(tau), ntvec(tau);
      
-     int Ntcnt = 0, ntcnt;
+     int Ntcnt = 0, ntcnt = 0;
      for(int i=0; i<tau; i++) {
-       
-       IntegerVector weeklagsub;
        
        for (int k=0; k < week_ref.length(); k++) {
          if((lag(k)==i) & (Date(week_ref(k))==week)) {
-           weeklagsub.push_front(lag(k));
+           ntcnt++;
          }
        }
-       ntcnt = weeklagsub.length();
        Ntcnt += ntcnt;
        ntvec(i) = ntcnt;
        Ntvec(i) = Ntcnt;

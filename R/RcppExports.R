@@ -65,8 +65,8 @@ RDNowcastProbs <- function(data, dateAnal, recentRef, NCdates, week_start = 2L, 
 #' Generates posterior probabilities for Nowcasting, based on Lawless, 1994.
 NULL
 
-Test1 <- function(data, dateAnal, recentRef, week_start = 2L, unit = "week", maxdelay = 25L, reference_date = "reference_date", report_date = "report_date", nsamples = 100000L) {
-    .Call(`_RDNowcast_Test1`, data, dateAnal, recentRef, week_start, unit, maxdelay, reference_date, report_date, nsamples)
+Test1 <- function(data, dateAnal, recentRef, week_start = 2L, maxdelay = 25L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
+    .Call(`_RDNowcast_Test1`, data, dateAnal, recentRef, week_start, maxdelay, reference_date, report_date, unit, nsamples)
 }
 
 #' Generates a vector of filled-in numbers 

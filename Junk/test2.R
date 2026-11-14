@@ -1,31 +1,14 @@
 
 # pacman::p_load(dplyr,data.table,ggplot2,tibble,Rcpp,lubridate,stringr)
 
-library(RDNowcast)
+# library(RDNowcast)
 
-data <- read.csv("~/Projects/GitHub/RDNowcast/data/RDdata.csv")
+data <- RDdata
 
-today1 <- max(data$report_date) + 1 - 364
+dateAnal <- "2026-07-09" |> as.Date()
+recentRef <- dateAnal - 1
 
-unit <- "day"
-unit <- "week"
-NCsize <- 20
-
-if (unit=="week") {
-  dtecomp <- day_anal - week_start;
-  mult <- 7;
-} else {
-  dtecomp <- 0;
-  mult <- 1;
-}
-
-ncdates <- seq.Date(today1 - 364 - 5*7,today1 - 364 + 5*7,by = "week")
-datean <- today1
-# unit <- "day"
-
-probs <- c(0.5,.025,.975)
-
-ls <- RDNowcast(data, dateAnal = datean, NCdates = ncdates,unit = unit,NCsize = NCsize)
+ls <- Test1(data, dateAnal = dateAnal, recentRef = recentRef,maxdelay = 25)
 ls2 <- LawlessNowcast(data, maxdelay = 25,dateAnal = datean)
 
 analysedata <- data |> ### die "simulierten" Analysedata (nach gewählter zeitl. Perspektive)
