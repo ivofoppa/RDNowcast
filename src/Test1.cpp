@@ -52,52 +52,57 @@ using namespace Rcpp;
    
    
    NumericMatrix gmat(nsamples,tau), pmat(nsamples,tau);
-   IntegerMatrix ntmat(7,tau),Ntmat(7,tau);
    NumericVector gvec(tau);
    
-   List wdayNtMat, wdayntMat;
+   List wdayNtMat(7), wdayntMat(7);
    
-   for(IntegerVector::iterator d = wdays.begin(); d != wdays.end(); d++) {
-     int wday = *d;
-     
-     IntegerVector Ntvec(tau), ntvec(tau);
-     DateVector evdatessub(evdates[(weekdays==wday)]);
-     DateVector uniqueDates = unique(evdatessub).sort();
-     IntegerMatrix ntMat(uniqueDates.length(),tau), NtMat(uniqueDates.length(),tau);
-     
-     NumericVector gvectot(nsamples*uniqueDates.length());
-     IntegerMatrix nt(nsamples*uniqueDates.length(),tau);
-     
-     int j = 0;
-     
-     for(DateVector::iterator e = uniqueDates.begin(); e != uniqueDates.end(); e++) {
+   int j = 2;
+   
+   // for(IntegerVector::iterator d = wdays.begin(); d != wdays.end(); d++) {}
+   
+   
+   // int wday = *d;
+   int wday = 3;
+   
+   IntegerVector Ntvec(tau), ntvec(tau);
+   DateVector evdatessub(evdates[(weekdays==wday)]);
+   DateVector uniqueDates = unique(evdatessub).sort();
+   IntegerMatrix ntMat(uniqueDates.length(),tau), NtMat(uniqueDates.length(),tau);
+   
+   NumericVector gvectot(nsamples*uniqueDates.length());
+   
+   // int l = 0;
+   int l = 0;
+   
+   // for(DateVector::iterator e = uniqueDates.begin(); e != uniqueDates.end(); e++) {}
+   
+   Date *e = uniqueDates.begin();
+   
+   DateVector evdatessubsub(evdates[evdates==Date(*e)]);
+   IntegerVector lagsubsub(lag[evdates==Date(*e)]);
+   
+   int Ntcnt = 0;
+   for(int i=0; i<tau; i++) {
+     int ntcnt = 0;
+     for(int k=0; k<evdatessubsub.length(); k++) {
        
-       DateVector evdatessubsub(evdates[evdates==Date(*e)]);
-       IntegerVector lagsubsub(lag[evdates==Date(*e)]);
-       
-       int Ntcnt = 0;
-       for(int i=0; i<tau; i++) {
-         int ntcnt = 0;
-         for(int k=0; k<evdatessubsub.length(); k++) {
-           
-           if(lagsubsub(k)==i) {
-             ntcnt++;
-           }
-         }
-         Ntcnt += ntcnt;
-         ntvec(i) = ntcnt;
-         Ntvec(i) = Ntcnt;
+       if(lagsubsub(k)==i) {
+         ntcnt++;
        }
-       
-       ntMat(j, _ ) = ntvec;
-       NtMat(j, _ ) = Ntvec;
      }
-     
-     wdayntMat[j] = ntMat;
-     wdayNtMat[j] = NtMat;
-     
-     j++;
+     Ntcnt += ntcnt;
+     ntvec(i) = ntcnt;
+     Ntvec(i) = Ntcnt;
    }
+   
+   ntMat(l, _ ) = ntvec;
+   NtMat(l, _ ) = Ntvec;
+   l++;
+   
+   wdayntMat[j] = ntMat;
+   wdayNtMat[j] = NtMat;
+   
+   // j++;
    
    return wdayntMat[2];
  }
