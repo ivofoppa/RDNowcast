@@ -1,6 +1,6 @@
 .Rproj.user
-.Rhistory
-.RData
+#.Rhistory
+#.RData
 .Ruserdata
 .positai
 src/*.o
