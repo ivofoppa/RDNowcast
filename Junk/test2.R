@@ -8,7 +8,7 @@ data <- RDdata
 dateAnal <- "2026-07-09" |> as.Date()
 recentRef <- dateAnal - 1
 
-ls <- Test1(data, dateAnal = dateAnal, recentRef = recentRef,maxdelay = 25)
+ls <- Test5(data, dateAnal = dateAnal, recentRef = recentRef,maxdelay = 25)
 ls2 <- LawlessNowcast(data, maxdelay = 25,dateAnal = datean)
 
 analysedata <- data |> ### die "simulierten" Analysedata (nach gewählter zeitl. Perspektive)

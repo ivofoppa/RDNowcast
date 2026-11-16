@@ -68,7 +68,6 @@ using namespace Rcpp;
      
      NumericVector gvectot(nsamples*uniqueDates.length());
      
-     // int l = 0;
      int l = 0;
      
      for(DateVector::iterator e = uniqueDates.begin(); e != uniqueDates.end(); e++) {
@@ -102,5 +101,5 @@ using namespace Rcpp;
      j++;
    }
    
-   return wdayNtMat;
+   return wdayntMat;
  }

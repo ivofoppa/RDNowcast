@@ -65,29 +65,15 @@ RDNowcastProbs <- function(data, dateAnal, recentRef, NCdates, week_start = 2L, 
 #' Generates posterior probabilities for Nowcasting, based on Lawless, 1994.
 NULL
 
-Test1 <- function(data, dateAnal, recentRef, week_start = 2L, maxdelay = 25L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
-    .Call(`_RDNowcast_Test1`, data, dateAnal, recentRef, week_start, maxdelay, reference_date, report_date, unit, nsamples)
-}
-
-#' Generates posterior probabilities for Nowcasting, based on Lawless, 1994.
-NULL
-
-Test2 <- function(data, dateAnal, recentRef, week_start = 2L, maxdelay = 25L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
-    .Call(`_RDNowcast_Test2`, data, dateAnal, recentRef, week_start, maxdelay, reference_date, report_date, unit, nsamples)
-}
-
-#' Generates posterior probabilities for Nowcasting, based on Lawless, 1994.
-NULL
-
-Test3 <- function(data, dateAnal, recentRef, week_start = 2L, maxdelay = 25L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
-    .Call(`_RDNowcast_Test3`, data, dateAnal, recentRef, week_start, maxdelay, reference_date, report_date, unit, nsamples)
-}
-
-#' Generates posterior probabilities for Nowcasting, based on Lawless, 1994.
-NULL
-
 Test4 <- function(data, dateAnal, recentRef, week_start = 2L, maxdelay = 25L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
     .Call(`_RDNowcast_Test4`, data, dateAnal, recentRef, week_start, maxdelay, reference_date, report_date, unit, nsamples)
+}
+
+#' Generates posterior probabilities for Nowcasting, based on Lawless, 1994.
+NULL
+
+Test5 <- function(data, dateAnal, recentRef, week_start = 2L, maxdelay = 25L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
+    .Call(`_RDNowcast_Test5`, data, dateAnal, recentRef, week_start, maxdelay, reference_date, report_date, unit, nsamples)
 }
 
 #' Generates a vector of filled-in numbers 

@@ -68,63 +68,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// Test1
-IntegerMatrix Test1(DataFrame data, Date dateAnal, Date recentRef, int week_start, int maxdelay, String reference_date, String report_date, String unit, int nsamples);
-RcppExport SEXP _RDNowcast_Test1(SEXP dataSEXP, SEXP dateAnalSEXP, SEXP recentRefSEXP, SEXP week_startSEXP, SEXP maxdelaySEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP unitSEXP, SEXP nsamplesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< Date >::type dateAnal(dateAnalSEXP);
-    Rcpp::traits::input_parameter< Date >::type recentRef(recentRefSEXP);
-    Rcpp::traits::input_parameter< int >::type week_start(week_startSEXP);
-    Rcpp::traits::input_parameter< int >::type maxdelay(maxdelaySEXP);
-    Rcpp::traits::input_parameter< String >::type reference_date(reference_dateSEXP);
-    Rcpp::traits::input_parameter< String >::type report_date(report_dateSEXP);
-    Rcpp::traits::input_parameter< String >::type unit(unitSEXP);
-    Rcpp::traits::input_parameter< int >::type nsamples(nsamplesSEXP);
-    rcpp_result_gen = Rcpp::wrap(Test1(data, dateAnal, recentRef, week_start, maxdelay, reference_date, report_date, unit, nsamples));
-    return rcpp_result_gen;
-END_RCPP
-}
-// Test2
-IntegerMatrix Test2(DataFrame data, Date dateAnal, Date recentRef, int week_start, int maxdelay, String reference_date, String report_date, String unit, int nsamples);
-RcppExport SEXP _RDNowcast_Test2(SEXP dataSEXP, SEXP dateAnalSEXP, SEXP recentRefSEXP, SEXP week_startSEXP, SEXP maxdelaySEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP unitSEXP, SEXP nsamplesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< Date >::type dateAnal(dateAnalSEXP);
-    Rcpp::traits::input_parameter< Date >::type recentRef(recentRefSEXP);
-    Rcpp::traits::input_parameter< int >::type week_start(week_startSEXP);
-    Rcpp::traits::input_parameter< int >::type maxdelay(maxdelaySEXP);
-    Rcpp::traits::input_parameter< String >::type reference_date(reference_dateSEXP);
-    Rcpp::traits::input_parameter< String >::type report_date(report_dateSEXP);
-    Rcpp::traits::input_parameter< String >::type unit(unitSEXP);
-    Rcpp::traits::input_parameter< int >::type nsamples(nsamplesSEXP);
-    rcpp_result_gen = Rcpp::wrap(Test2(data, dateAnal, recentRef, week_start, maxdelay, reference_date, report_date, unit, nsamples));
-    return rcpp_result_gen;
-END_RCPP
-}
-// Test3
-IntegerMatrix Test3(DataFrame data, Date dateAnal, Date recentRef, int week_start, int maxdelay, String reference_date, String report_date, String unit, int nsamples);
-RcppExport SEXP _RDNowcast_Test3(SEXP dataSEXP, SEXP dateAnalSEXP, SEXP recentRefSEXP, SEXP week_startSEXP, SEXP maxdelaySEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP unitSEXP, SEXP nsamplesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< Date >::type dateAnal(dateAnalSEXP);
-    Rcpp::traits::input_parameter< Date >::type recentRef(recentRefSEXP);
-    Rcpp::traits::input_parameter< int >::type week_start(week_startSEXP);
-    Rcpp::traits::input_parameter< int >::type maxdelay(maxdelaySEXP);
-    Rcpp::traits::input_parameter< String >::type reference_date(reference_dateSEXP);
-    Rcpp::traits::input_parameter< String >::type report_date(report_dateSEXP);
-    Rcpp::traits::input_parameter< String >::type unit(unitSEXP);
-    Rcpp::traits::input_parameter< int >::type nsamples(nsamplesSEXP);
-    rcpp_result_gen = Rcpp::wrap(Test3(data, dateAnal, recentRef, week_start, maxdelay, reference_date, report_date, unit, nsamples));
-    return rcpp_result_gen;
-END_RCPP
-}
 // Test4
 List Test4(DataFrame data, Date dateAnal, Date recentRef, int week_start, int maxdelay, String reference_date, String report_date, String unit, int nsamples);
 RcppExport SEXP _RDNowcast_Test4(SEXP dataSEXP, SEXP dateAnalSEXP, SEXP recentRefSEXP, SEXP week_startSEXP, SEXP maxdelaySEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP unitSEXP, SEXP nsamplesSEXP) {
@@ -141,6 +84,25 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< String >::type unit(unitSEXP);
     Rcpp::traits::input_parameter< int >::type nsamples(nsamplesSEXP);
     rcpp_result_gen = Rcpp::wrap(Test4(data, dateAnal, recentRef, week_start, maxdelay, reference_date, report_date, unit, nsamples));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Test5
+List Test5(DataFrame data, Date dateAnal, Date recentRef, int week_start, int maxdelay, String reference_date, String report_date, String unit, int nsamples);
+RcppExport SEXP _RDNowcast_Test5(SEXP dataSEXP, SEXP dateAnalSEXP, SEXP recentRefSEXP, SEXP week_startSEXP, SEXP maxdelaySEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP unitSEXP, SEXP nsamplesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< Date >::type dateAnal(dateAnalSEXP);
+    Rcpp::traits::input_parameter< Date >::type recentRef(recentRefSEXP);
+    Rcpp::traits::input_parameter< int >::type week_start(week_startSEXP);
+    Rcpp::traits::input_parameter< int >::type maxdelay(maxdelaySEXP);
+    Rcpp::traits::input_parameter< String >::type reference_date(reference_dateSEXP);
+    Rcpp::traits::input_parameter< String >::type report_date(report_dateSEXP);
+    Rcpp::traits::input_parameter< String >::type unit(unitSEXP);
+    Rcpp::traits::input_parameter< int >::type nsamples(nsamplesSEXP);
+    rcpp_result_gen = Rcpp::wrap(Test5(data, dateAnal, recentRef, week_start, maxdelay, reference_date, report_date, unit, nsamples));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -173,10 +135,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RDNowcast_LawlessNowcastProbs", (DL_FUNC) &_RDNowcast_LawlessNowcastProbs, 7},
     {"_RDNowcast_NowcastFull", (DL_FUNC) &_RDNowcast_NowcastFull, 11},
     {"_RDNowcast_RDNowcastProbs", (DL_FUNC) &_RDNowcast_RDNowcastProbs, 10},
-    {"_RDNowcast_Test1", (DL_FUNC) &_RDNowcast_Test1, 9},
-    {"_RDNowcast_Test2", (DL_FUNC) &_RDNowcast_Test2, 9},
-    {"_RDNowcast_Test3", (DL_FUNC) &_RDNowcast_Test3, 9},
     {"_RDNowcast_Test4", (DL_FUNC) &_RDNowcast_Test4, 9},
+    {"_RDNowcast_Test5", (DL_FUNC) &_RDNowcast_Test5, 9},
     {"_RDNowcast_f_N_vec", (DL_FUNC) &_RDNowcast_f_N_vec, 2},
     {"_RDNowcast_f_N_arr", (DL_FUNC) &_RDNowcast_f_N_arr, 2},
     {NULL, NULL, 0}
