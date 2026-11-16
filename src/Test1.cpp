@@ -76,10 +76,10 @@ using namespace Rcpp;
    
    // for(DateVector::iterator e = uniqueDates.begin(); e != uniqueDates.end(); e++) {}
    
-   Date *e = uniqueDates.begin();
+   Date e = uniqueDates(0);
    
-   DateVector evdatessubsub(evdates[evdates==Date(*e)]);
-   IntegerVector lagsubsub(lag[evdates==Date(*e)]);
+   DateVector evdatessubsub(evdates[evdates==Date(e)]);
+   IntegerVector lagsubsub(lag[evdates==Date(e)]);
    
    int Ntcnt = 0;
    for(int i=0; i<tau; i++) {
