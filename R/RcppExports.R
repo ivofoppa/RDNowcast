@@ -69,6 +69,27 @@ Test1 <- function(data, dateAnal, recentRef, week_start = 2L, maxdelay = 25L, re
     .Call(`_RDNowcast_Test1`, data, dateAnal, recentRef, week_start, maxdelay, reference_date, report_date, unit, nsamples)
 }
 
+#' Generates posterior probabilities for Nowcasting, based on Lawless, 1994.
+NULL
+
+Test2 <- function(data, dateAnal, recentRef, week_start = 2L, maxdelay = 25L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
+    .Call(`_RDNowcast_Test2`, data, dateAnal, recentRef, week_start, maxdelay, reference_date, report_date, unit, nsamples)
+}
+
+#' Generates posterior probabilities for Nowcasting, based on Lawless, 1994.
+NULL
+
+Test3 <- function(data, dateAnal, recentRef, week_start = 2L, maxdelay = 25L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
+    .Call(`_RDNowcast_Test3`, data, dateAnal, recentRef, week_start, maxdelay, reference_date, report_date, unit, nsamples)
+}
+
+#' Generates posterior probabilities for Nowcasting, based on Lawless, 1994.
+NULL
+
+Test4 <- function(data, dateAnal, recentRef, week_start = 2L, maxdelay = 25L, reference_date = "reference_date", report_date = "report_date", unit = "week", nsamples = 100000L) {
+    .Call(`_RDNowcast_Test4`, data, dateAnal, recentRef, week_start, maxdelay, reference_date, report_date, unit, nsamples)
+}
+
 #' Generates a vector of filled-in numbers 
 #' 
 #' \code{f_N_vec} returns a vector of random numbers from the distribution of the total number \code{N}, given the number of successes \code{x}
