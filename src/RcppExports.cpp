@@ -69,7 +69,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // Test4
-List Test4(DataFrame data, Date dateAnal, Date recentRef, int week_start, int maxdelay, String reference_date, String report_date, String unit, int nsamples);
+IntegerMatrix Test4(DataFrame data, Date dateAnal, Date recentRef, int week_start, int maxdelay, String reference_date, String report_date, String unit, int nsamples);
 RcppExport SEXP _RDNowcast_Test4(SEXP dataSEXP, SEXP dateAnalSEXP, SEXP recentRefSEXP, SEXP week_startSEXP, SEXP maxdelaySEXP, SEXP reference_dateSEXP, SEXP report_dateSEXP, SEXP unitSEXP, SEXP nsamplesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

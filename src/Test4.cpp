@@ -17,7 +17,7 @@ using namespace Rcpp;
  //' @example man/examples/LawlessNowcastProbs_example.R
  //' @export
  // [[Rcpp::export]]
- List Test4(DataFrame data, Date dateAnal, Date recentRef,
+IntegerMatrix Test4(DataFrame data, Date dateAnal, Date recentRef,
                      int week_start = 2, int maxdelay = 25,
                      String reference_date = "reference_date", String report_date = "report_date", String unit = "week", 
                      int nsamples = 100000) {
@@ -102,5 +102,5 @@ using namespace Rcpp;
      j++;
    }
    
-   return wdayNtMat;
+   return wdayNtMat[3];
  }
