@@ -101,5 +101,5 @@ using namespace Rcpp;
      j++;
    }
    
-   return wdayNtMat;
+   return wdayntMat;
  }
